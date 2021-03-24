@@ -20,7 +20,7 @@ Fn<0, double>(double x, const Table<0>& table) noexcept
     {
         auto w = x - 0.1 * pnt;
 
-        value = horner1D(table[pnt], w);
+        value = horner(w, table[pnt]);
     }
     else
     {
@@ -30,7 +30,7 @@ Fn<0, double>(double x, const Table<0>& table) noexcept
 
         if (pnt < 361)
         {
-            auto f = horner1D(std::array<double, 5>{0.0, 0.4999489092, -0.2473631686, +0.3211809090, -0.3811559346}, fia);
+            auto f = horner(fia, 0.0, 0.4999489092, -0.2473631686, +0.3211809090, -0.3811559346);
 
             value -= f * std::exp(-x);
         }

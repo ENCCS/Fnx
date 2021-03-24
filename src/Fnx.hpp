@@ -48,7 +48,7 @@ Fn(const std::vector<T>& x) noexcept
 {
     auto values = std::vector<T>(x.size(), 0.0);
 
-    detail::Fn<order, T>(x, values);
+    Fn<order, T>(x, values);
 
     return values;
 }
