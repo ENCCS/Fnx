@@ -1,48 +1,41 @@
 #pragma once
 
+#include "Fnx.hpp"
+
 #include <cmath>
-#include <vector>
 
 #include "utils.hpp"
 
 namespace detail {
 template <>
-inline double
-Fn<0, double>(double x, const Table<0>& table) noexcept
-{
-    auto fpi = 0.5 * std::sqrt(M_PI);
+inline Values<double, 0> Fn<double, 0>(double x, const Table &table) noexcept {
+  auto vs = Values<double, 0>{{0.0}};
+  auto pnt = grid_point(x);
 
-    auto pnt = grid_point(x);
+  if (pnt < 121) {
+    auto w = x - 0.1 * pnt;
 
-    auto value = 0.0;
+    vs.at(0) = horner(w, table[pnt]);
+  } else {
+    auto fia = 1.0 / x;
 
-    if (pnt < 121)
-    {
-        auto w = x - 0.1 * pnt;
+    auto value = 0.5 * std::sqrt(M_PI) * std::sqrt(fia);
 
-        value = horner(w, table[pnt]);
+    if (pnt < 361) {
+      auto f = horner(fia, 0.0, 0.4999489092, -0.2473631686, +0.3211809090,
+                      -0.3811559346);
+
+      vs.at(0) = value - f * std::exp(-x);
+    } else {
+      vs.at(0) = value;
     }
-    else
-    {
-        auto fia = 1.0 / x;
+  }
 
-        value = fpi * std::sqrt(fia);
-
-        if (pnt < 361)
-        {
-            auto f = horner(fia, 0.0, 0.4999489092, -0.2473631686, +0.3211809090, -0.3811559346);
-
-            value -= f * std::exp(-x);
-        }
-    }
-
-    return value;
+  return vs;
 }
 
-template <>
-inline constexpr Table<0>
-pretabulated<0>() noexcept
-{
+template <> inline constexpr Table pretabulated<0>() noexcept {
+  // clang-format off
     return {{{1.000000000000000e+00, -3.333333333333333e-01, 1.000000000000000e-01, -2.380952380952381e-02, 4.629629629629629e-03, -7.575757575757576e-04, 1.068376068376069e-04},
              {9.676433126355918e-01, -3.140294729981613e-01, 9.312750239631074e-02, -2.203133827262316e-02, 4.266414461294388e-03, -6.961710668178456e-04, 9.797493169164401e-05},
              {9.371500287979786e-01, -2.960481892999920e-01, 8.676726852749291e-02, -2.039247174872802e-02, 3.932610455061977e-03, -6.398563586542790e-04, 8.985986231134159e-05},
@@ -164,5 +157,6 @@ pretabulated<0>() noexcept
              {2.579903264232664e-01, -1.093147550276915e-02, 6.946381769150941e-04, -4.900337013584661e-05, 3.620474907822184e-06, -2.734880021802670e-07, 2.080388447286230e-08},
              {2.569040766107217e-01, -1.079400362209727e-02, 6.801516903673212e-04, -4.758211833939669e-05, 3.486797208416117e-06, -2.613297591773471e-07, 1.973417818083096e-08},
              {2.558314305293833e-01, -1.065938692987627e-02, 6.660836786932408e-04, -4.621314287902148e-05, 3.359041299593018e-06, -2.497946904023490e-07, 1.872597100565817e-08}}};
+  // clang-format on
 }
-}  // namespace detail
+} // namespace detail

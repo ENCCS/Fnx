@@ -2,7 +2,6 @@
 
 #include <array>
 #include <cstdint>
-#include <vector>
 
 #include "types.hpp"
 
@@ -13,7 +12,7 @@ namespace detail {
  * @tparam order Order of the table to fetch.
  * @return table of values.
  */
-template <int32_t order> inline constexpr Table<order> pretabulated() noexcept;
+template <int32_t order> inline constexpr Table pretabulated() noexcept;
 
 constexpr double odd_number(std::size_t n) noexcept {
   return static_cast<double>(2 * n + 1);
@@ -23,7 +22,6 @@ constexpr double inverse_odd_number(std::size_t n) noexcept {
   return static_cast<double>(1.0 / (2 * n + 1));
 }
 
-namespace detail {
 template <typename T, std::size_t N, typename Generator, std::size_t... Is>
 constexpr std::array<T, N>
 fill_array_impl(const Generator &g, std::index_sequence<Is...>) noexcept {
@@ -107,38 +105,3 @@ template <typename T,
 inline constexpr int32_t grid_point(T x) noexcept {
   return (x > 1.0e5) ? 1000000 : static_cast<int32_t>(10.0 * x + 0.5);
 }
-
-/**
- * Evaluate Boys function at single point.
- *
- * @tparam order Order of the Boys function.
- * @tparam T scalar type of evaluation points and return values. Must be
- * floating point
- * @param[in] x evaluation point
- * @param[in] table pretabulated values.
- * @return value at point.
- */
-template <int32_t order, typename T,
-          typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline T Fn(T x, const Table<order> &table) noexcept;
-
-/**
- * Evaluate Boys function at multiple points.
- *
- * @tparam order Order of the Boys function.
- * @tparam T scalar type of evaluation points and return values. Must be
- * floating point
- * @param[in] x vector of evaluation points
- * @param[in] y vector of output values
- */
-template <int32_t order, typename T,
-          typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline void Fn(const std::vector<T> &x, std::vector<T> &y) noexcept {
-  auto table = pretabulated<order>();
-
-#pragma omp parallel for schedule(static)
-  for (auto i = 0; i < x.size(); ++i) {
-    y[i] = Fn<order, T>(x[i], table);
-  }
-}
-} // namespace detail

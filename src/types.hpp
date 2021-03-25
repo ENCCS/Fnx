@@ -5,8 +5,9 @@
 #include <type_traits>
 #include <utility>
 
-template <int32_t order>
-using Table = std::array<std::array<double, 7>, 121 * (order + 1)>;
+using Table = std::array<std::array<double, 7>, 121>;
+
+template <typename T, int32_t order> using Values = std::array<T, order + 1U>;
 
 #if __cplusplus < 201402L
 namespace detail {
