@@ -14,7 +14,7 @@
 int main(int argc, char *argv[]) {
   // CLI set up
   int32_t order;
-  auto npoints = 1000;
+  auto npoints = 1e4;
   auto lower = 0.0;
   auto upper = 125.0;
   bool show_help = false;
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
              lyra::arg(order, "order")
                  .required()("Evaluation order of the Boys function") |
              lyra::opt(npoints, "npoints")["-n"]["--npoints"](
-                 "How many evaluation points (default 1e7)") |
+                 "How many evaluation points (default 1e4)") |
              lyra::opt(lower, "lower")["-l"]["--lower"](
                  "Lower bound of evaluation interval (default 0.0)") |
              lyra::opt(upper, "upper")["-u"]["--upper"](
