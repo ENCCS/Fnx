@@ -8,6 +8,7 @@ FetchContent_MakeAvailable(Catch2)
 add_executable(unit_tests
     main.cpp
     bf_00.cpp
+    bf_01.cpp
     )
 
 target_link_libraries(unit_tests
