@@ -64,7 +64,6 @@ inline void Fn(const std::vector<T> &x, std::vector<T> &y) noexcept {
   auto retval = Values<T, order>();
   auto npoints = x.size();
 
-#pragma omp parallel for schedule(static) shared(table, npoints)
   for (auto j = 0; j < npoints; ++j) {
     retval = Fn<T, order>(x[j], table);
     std::move(retval.cbegin(), retval.cend(), y.begin() + j*(order+1));

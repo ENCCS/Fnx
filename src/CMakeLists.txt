@@ -10,14 +10,6 @@ target_include_directories(Fnx
     ${CMAKE_CURRENT_LIST_DIR}
   )
 
-if(Fnx_ENABLE_OPENMP)
-  find_package(OpenMP 4.5 REQUIRED COMPONENTS CXX)
-  target_link_libraries(Fnx
-    PUBLIC
-      OpenMP::OpenMP_CXX
-    )
-endif()
-
 include(FetchContent)
 FetchContent_Declare(Lyra
   QUIET

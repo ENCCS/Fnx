@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.13)
 
 project(Fnx LANGUAGES CXX)
 
-option(Fnx_ENABLE_OPENMP "Enable OpenMP parallelization" OFF)
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
