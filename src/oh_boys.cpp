@@ -1,14 +1,11 @@
 #include <algorithm>
 #include <chrono>
+#include <cstdint>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <random>
 #include <vector>
-
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 #include <lyra/lyra.hpp>
 
@@ -17,7 +14,7 @@
 int main(int argc, char *argv[]) {
   // CLI set up
   int32_t order;
-  auto npoints = 1e7;
+  auto npoints = 1000;
   auto lower = 0.0;
   auto upper = 125.0;
   bool show_help = false;
@@ -52,11 +49,6 @@ int main(int argc, char *argv[]) {
   std::cout << "Evaluating the Boys function of order " << order << " on "
             << npoints << " random points in [" << lower << ", " << upper << "]"
             << std::endl;
-
-#ifdef _OPENMP
-  std::cout << omp_get_num_procs() << " processors and "
-            << omp_get_max_threads() << " threads available" << std::endl;
-#endif
 
   std::random_device rd;
   std::mt19937 mt(rd());
