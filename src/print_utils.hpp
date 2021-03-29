@@ -2,9 +2,10 @@
 
 #include <iostream>
 #include <string>
+#include <type_traits>
 
-template <typename T>
-inline void PRINT_COLLECTION(const T &c, const std::string &title = "",
+template <typename Container>
+inline void PRINT_COLLECTION(const Container &c, const std::string &title = "",
                              char start = '[', char sep = ' ', char end = ']') {
   std::cout << title << std::endl;
   std::cout << start;

@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
   auto end = std::chrono::steady_clock::now();
 
   std::chrono::duration<double, std::milli> diff = end - start;
-  std::cout << "Elapsed time = " << std::setw(9) << diff.count() << " ms\n ";
+  std::cout << ">>> Total elapsed time = " << std::setw(9) << diff.count() << " ms\n ";
 
   return EXIT_SUCCESS;
 }

@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <vector>
 
+#include "print_utils.hpp"
 #include "types.hpp"
 #include "utils.hpp"
 
@@ -26,12 +27,13 @@ std::vector<T> boys_function(int32_t order, T x);
  * @tparam T scalar type of evaluation points and return values. Must be
  * floating point
  * @param[in] order order of the Boys function
- * @param[in] x vector of evaluation points
+ * @param[in,out] x vector of evaluation points
  * @return vector of output values
+ * @note the vector of evaluation points will be sorted in-place
  */
 template <typename T,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-std::vector<T> boys_function(int32_t order, const std::vector<T> &x);
+std::vector<T> boys_function(int32_t order, const std::vector<T> &xs);
 
 namespace detail {
 /**
@@ -48,6 +50,12 @@ template <typename T, int32_t order,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
 inline Values<T, order> Fn(T x, const Table &table) noexcept;
 
+template <typename T, int32_t order,
+          typename = std::enable_if_t<std::is_floating_point<T>::value>>
+inline std::vector<T> Fn(const std::vector<Point<T>> &ls, const Table &table,
+                         const std::vector<Point<T>> &ms,
+                         const std::vector<Point<T>> &hs) noexcept;
+
 /**
  * Evaluate Boys function at multiple points.
  *
@@ -55,40 +63,24 @@ inline Values<T, order> Fn(T x, const Table &table) noexcept;
  * floating point
  * @tparam order Order of the Boys function.
  * @param[in] x vector of evaluation points
- * @param[in] y vector of output values
+ * @return vector of output values
  */
 template <typename T, int32_t order,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline void Fn(const std::vector<T> &x, std::vector<T> &y) noexcept {
+inline std::vector<T> Fn(const std::vector<T> &x) noexcept {
+  auto y = std::vector<double>(x.size() * (order + 1), 0.0);
+
   constexpr auto table = pretabulated<order>();
   auto retval = Values<T, order>();
   auto npoints = x.size();
 
   for (auto j = 0; j < npoints; ++j) {
     retval = Fn<T, order>(x[j], table);
-    std::move(retval.cbegin(), retval.cend(), y.begin() + j*(order+1));
+    std::move(retval.cbegin(), retval.cend(), y.begin() + j * (order + 1));
   }
-}
 
-/**
- * Evaluate Boys function on grid of points.
- *
- * @tparam T scalar type of evaluation points and return values.
- * @tparam order Order of the Boys function.
- * @param[in] x vector of evaluation points
- * @return vector of values.
- *
- * @note The number of elements in the output might be larger than that in the
- * input, since for higher order we evaluate also lower order by downward
- * recursion.
- */
-template <typename T, int32_t order,
-          typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline std::vector<T> Fn(const std::vector<T> &x) noexcept {
-  auto values = std::vector<T>(x.size() * (order + 1), 0.0);
+  //PRINT_COLLECTION(y, "more values");
 
-  Fn<T, order>(x, values);
-
-  return values;
+  return y;
 }
 } // namespace detail

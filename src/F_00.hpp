@@ -34,6 +34,39 @@ inline Values<double, 0> Fn<double, 0>(double x, const Table &table) noexcept {
   return vs;
 }
 
+template <>
+inline std::vector<double>
+Fn<double, 0>(const std::vector<detail::Point<double>> &ls, const Table &table,
+              const std::vector<detail::Point<double>> &ms,
+              const std::vector<detail::Point<double>> &hs) noexcept {
+  auto vs = std::vector<double>(ls.size() + ms.size() + hs.size(), 0.0);
+
+  // low-range points
+  for (const auto x : ls) {
+    auto pnt = grid_point(x.second);
+    auto w = x.second - 0.1 * pnt;
+
+    vs[x.first] = horner(w, table[pnt]);
+  }
+  // mid-range points
+  for (const auto x : ms) {
+    auto fia = 1.0 / x.second;
+
+    auto value = 0.5 * std::sqrt(M_PI) * std::sqrt(fia);
+
+    auto f = horner(fia, 0.0, 0.4999489092, -0.2473631686, +0.3211809090,
+                    -0.3811559346);
+
+    vs[x.first] = value - f * std::exp(-x.second);
+  }
+  // high-range points
+  for (const auto x : hs) {
+    vs[x.first] = 0.5 * std::sqrt(M_PI) * std::sqrt(1.0 / x.second);
+  }
+
+  return vs;
+}
+
 template <> inline constexpr Table pretabulated<0>() noexcept {
   // clang-format off
     return {{{1.000000000000000e+00, -3.333333333333333e-01, 1.000000000000000e-01, -2.380952380952381e-02, 4.629629629629629e-03, -7.575757575757576e-04, 1.068376068376069e-04},

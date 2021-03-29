@@ -68,6 +68,63 @@ constexpr T horner_impl(T x, const std::array<T, N> &coefs,
                         std::index_sequence<Is...>) noexcept {
   return horner(x, coefs[Is]...);
 }
+
+// Code adapted from https://stackoverflow.com/a/10962575/2528668
+template <typename T> struct iterator_extractor {
+  using type = typename T::iterator;
+};
+
+template <typename T> struct iterator_extractor<const T> {
+  using type = typename T::const_iterator;
+};
+
+template <typename T> class Indexer {
+public:
+  class iterator {
+    using inner_iterator = typename iterator_extractor<T>::type;
+
+    using inner_reference =
+        typename std::iterator_traits<inner_iterator>::reference;
+
+  public:
+    using reference = std::pair<std::size_t, inner_reference>;
+
+    iterator(inner_iterator it) : _pos(0), _it(it) {}
+
+    reference operator*() const { return reference(_pos, *_it); }
+
+    iterator &operator++() {
+      ++_pos;
+      ++_it;
+      return *this;
+    }
+    iterator operator++(int) {
+      iterator tmp(*this);
+      ++*this;
+      return tmp;
+    }
+
+    bool operator==(iterator const &it) const { return _it == it._it; }
+    bool operator!=(iterator const &it) const { return !(*this == it); }
+
+  private:
+    size_t _pos;
+    inner_iterator _it;
+  };
+
+  Indexer(T &t) : _container(t) {}
+
+  iterator begin() const { return iterator(_container.begin()); }
+  iterator end() const { return iterator(_container.end()); }
+
+private:
+  T &_container;
+};
+
+template <typename T> Indexer<T> index(T &t) { return Indexer<T>(t); }
+
+template <typename T>
+using Point = std::pair<typename std::vector<T>::difference_type, T>;
 } // namespace detail
 
 /**
