@@ -6,35 +6,86 @@
 #include "types.hpp"
 
 namespace detail {
-/**
- * Pretabulated values of given order.
+/** n-th odd number as double precision.
  *
- * @tparam order Order of the table to fetch.
- * @return table of values.
+ * @param n index of the odd number.
+ * @return odd number as double precision.
  */
-template <int32_t order> inline constexpr Table pretabulated() noexcept;
-
 constexpr double odd_number(std::size_t n) noexcept {
   return static_cast<double>(2 * n + 1);
 }
 
+/** n-th inverse odd number as double precision.
+ *
+ * @param n index of the odd number.
+ * @return inverse odd number as double precision.
+ */
 constexpr double inverse_odd_number(std::size_t n) noexcept {
   return static_cast<double>(1.0 / (2 * n + 1));
 }
 
+/** Compile-time fill an array of N elements with results of a function of the
+ * index.
+ *
+ * @tparam T output scalar type
+ * @tparam N size of the array
+ * @tparam Generator function to apply on each index. Signature: T g(std::size_t
+ * i)
+ * @tparam Is indices
+ * @param g generator function
+ * @param index sequence
+ */
 template <typename T, std::size_t N, typename Generator, std::size_t... Is>
 constexpr std::array<T, N>
 fill_array_impl(const Generator &g, std::index_sequence<Is...>) noexcept {
   return {{g(Is)...}};
 }
+
+template <typename T>
+using Point = std::pair<typename std::vector<T>::difference_type, T>;
 } // namespace detail
 
+/**
+ * Obtain index of point within pretabulated grid.
+ *
+ * @tparam T scalar type of the point variable. Must be floating point
+ * @param[in] x the point
+ * @return The index of the point in the pretabulated grid.
+ */
+template <typename T,
+          typename = std::enable_if_t<std::is_floating_point<T>::value>>
+inline constexpr int32_t grid_point(T x) noexcept {
+  return (x > 1.0e5) ? 1000000 : static_cast<int32_t>(10.0 * x + 0.5);
+}
+
+/** Compile-time fill an array of N elements with results of a function of the
+ * index.
+ *
+ * @tparam T output scalar type
+ * @tparam N size of the array
+ * @tparam Generator function to apply on each index. Signature: T g(std::size_t
+ * i)
+ * @tparam Is indices
+ * @param g generator function
+ */
 template <typename T, std::size_t N, typename Generator,
           typename Is = std::make_index_sequence<N>>
 constexpr std::array<T, N> fill_array(const Generator &g) noexcept {
   return detail::fill_array_impl<T, N>(g, Is{});
 }
 
+/** Compile-time array of the N first inverse odd numbers.
+ *
+ * @tparam T output scalar type
+ * @tparam N size of the array
+ */
+template <typename T, std::size_t N>
+constexpr std::array<T, N> inverse_odd_numbers() noexcept {
+  return fill_array<T, N>(detail::inverse_odd_number);
+}
+
+/** Base case of Horner's scheme compile-time recursion (variadic
+ * implementation). */
 template <typename X, typename T> constexpr X horner(X /* x */, T v) noexcept {
   return static_cast<X>(v);
 }
@@ -63,68 +114,15 @@ constexpr X horner(X x, T c0, Args... cs) noexcept {
 }
 
 namespace detail {
+/** Implementation of Horner's scheme with an array of coefficients.
+ *
+ * @note This uses the variadic implementation internally.
+ */
 template <typename T, std::size_t N, std::size_t... Is>
 constexpr T horner_impl(T x, const std::array<T, N> &coefs,
                         std::index_sequence<Is...>) noexcept {
   return horner(x, coefs[Is]...);
 }
-
-// Code adapted from https://stackoverflow.com/a/10962575/2528668
-template <typename T> struct iterator_extractor {
-  using type = typename T::iterator;
-};
-
-template <typename T> struct iterator_extractor<const T> {
-  using type = typename T::const_iterator;
-};
-
-template <typename T> class Indexer {
-public:
-  class iterator {
-    using inner_iterator = typename iterator_extractor<T>::type;
-
-    using inner_reference =
-        typename std::iterator_traits<inner_iterator>::reference;
-
-  public:
-    using reference = std::pair<std::size_t, inner_reference>;
-
-    iterator(inner_iterator it) : _pos(0), _it(it) {}
-
-    reference operator*() const { return reference(_pos, *_it); }
-
-    iterator &operator++() {
-      ++_pos;
-      ++_it;
-      return *this;
-    }
-    iterator operator++(int) {
-      iterator tmp(*this);
-      ++*this;
-      return tmp;
-    }
-
-    bool operator==(iterator const &it) const { return _it == it._it; }
-    bool operator!=(iterator const &it) const { return !(*this == it); }
-
-  private:
-    size_t _pos;
-    inner_iterator _it;
-  };
-
-  Indexer(T &t) : _container(t) {}
-
-  iterator begin() const { return iterator(_container.begin()); }
-  iterator end() const { return iterator(_container.end()); }
-
-private:
-  T &_container;
-};
-
-template <typename T> Indexer<T> index(T &t) { return Indexer<T>(t); }
-
-template <typename T>
-using Point = std::pair<typename std::vector<T>::difference_type, T>;
 } // namespace detail
 
 /**
@@ -148,17 +146,4 @@ using Point = std::pair<typename std::vector<T>::difference_type, T>;
 template <typename T, std::size_t N, typename Is = std::make_index_sequence<N>>
 constexpr T horner(T x, const std::array<T, N> &c) noexcept {
   return detail::horner_impl(x, c, Is{});
-}
-
-/**
- * Obtain index of point within pretabulated grid.
- *
- * @tparam T scalar type of the point variable. Must be floating point
- * @param[in] x the point
- * @return The index of the point in the pretabulated grid.
- */
-template <typename T,
-          typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline constexpr int32_t grid_point(T x) noexcept {
-  return (x > 1.0e5) ? 1000000 : static_cast<int32_t>(10.0 * x + 0.5);
 }
