@@ -1,11 +1,11 @@
 #include "Fnx.hpp"
 
 #include <chrono>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <vector>
 
-#include "print_utils.hpp"
 #include "utils.hpp"
 
 using namespace detail;
@@ -13,38 +13,6 @@ using namespace detail;
 template <>
 std::vector<double> boys_function(int32_t order,
                                   const std::vector<double> &xs) {
-  //auto start = std::chrono::steady_clock::now();
-  //// classify input points and NON-DESTRUCTIVELY partition them into separate
-  //// vectors we create 3 empty vectors with a reservation of a 3rd of the size
-  //// of the xs
-  //auto r = static_cast<size_t>(xs.size() / 3);
-  //auto ls = std::vector<Point<double>>();
-  //ls.reserve(r);
-  //auto ms = std::vector<Point<double>>();
-  //ms.reserve(r);
-  //auto hs = std::vector<Point<double>>();
-  //hs.reserve(r);
-  //for (auto i = 0; i < xs.size(); ++i) {
-  //  auto x = xs[i];
-  //  auto p = grid_point(x);
-
-  //  if (p < 121) {
-  //    ls.emplace_back(i, x);
-  //  } else if (p < 361 + order * 20) {
-  //    ms.emplace_back(i, x);
-  //  } else {
-  //    hs.emplace_back(i, x);
-  //  }
-  //}
-  //auto end = std::chrono::steady_clock::now();
-
-  //std::chrono::duration<double, std::milli> diff = end - start;
-  //std::cout << "Time elapsed in classification/partition = " << std::setw(9)
-  //          << diff.count() << " ms\n ";
-
-  //PRINT_COLLECTION(detail::Fn<double, 0>(ls, ms, hs),
-  //                 "values");
-
   // compute Boys function
   switch (order) {
   case 0:
@@ -110,6 +78,106 @@ std::vector<double> boys_function(int32_t order,
               << std::endl;
     std::abort();
   }
+}
 
-  // rearrange output
+template <>
+std::vector<double> boys_function_classify(int32_t order,
+                                           const std::vector<double> &xs) {
+  // Classify input points and NON-DESTRUCTIVELY partition them into separate
+  // vectors. We create 3 empty vectors with a reservation of a 3rd of the size
+  // of the xs
+
+  auto start = std::chrono::steady_clock::now();
+
+  auto r = static_cast<size_t>(xs.size() / 3);
+  auto ls = std::vector<Point<double>>();
+  ls.reserve(r);
+  auto ms = std::vector<Point<double>>();
+  ms.reserve(r);
+  auto hs = std::vector<Point<double>>();
+  hs.reserve(r);
+  for (auto i = 0; i < xs.size(); ++i) {
+    auto x = xs[i];
+    auto p = grid_point(x);
+
+    if (p < 121) {
+      ls.emplace_back(i, x);
+    } else if (p < 361 + order * 20) {
+      ms.emplace_back(i, x);
+    } else {
+      hs.emplace_back(i, x);
+    }
+  }
+
+  auto end = std::chrono::steady_clock::now();
+
+  std::chrono::duration<double, std::milli> diff = end - start;
+  std::cout << ">>> Time elapsed in point classification/partition = " << std::setw(9)
+            << diff.count() << " ms\n";
+
+  // compute Boys function
+  switch (order) {
+  case 0:
+    return detail::Fn<double, 0>(ls, ms, hs);
+  case 1:
+    return detail::Fn<double, 1>(ls, ms, hs);
+  case 2:
+    return detail::Fn<double, 2>(ls, ms, hs);
+  case 3:
+    return detail::Fn<double, 3>(ls, ms, hs);
+  case 4:
+    return detail::Fn<double, 4>(ls, ms, hs);
+  case 5:
+    return detail::Fn<double, 5>(ls, ms, hs);
+  case 6:
+    return detail::Fn<double, 6>(ls, ms, hs);
+  case 7:
+    return detail::Fn<double, 7>(ls, ms, hs);
+  case 8:
+    return detail::Fn<double, 8>(ls, ms, hs);
+  case 9:
+    return detail::Fn<double, 9>(ls, ms, hs);
+  case 10:
+    return detail::Fn<double, 10>(ls, ms, hs);
+  case 11:
+    return detail::Fn<double, 11>(ls, ms, hs);
+  case 12:
+    return detail::Fn<double, 12>(ls, ms, hs);
+  case 13:
+    return detail::Fn<double, 13>(ls, ms, hs);
+  case 14:
+    return detail::Fn<double, 14>(ls, ms, hs);
+  case 15:
+    return detail::Fn<double, 15>(ls, ms, hs);
+  case 16:
+    return detail::Fn<double, 16>(ls, ms, hs);
+  case 17:
+    return detail::Fn<double, 17>(ls, ms, hs);
+  case 18:
+    return detail::Fn<double, 18>(ls, ms, hs);
+  case 19:
+    return detail::Fn<double, 19>(ls, ms, hs);
+  case 20:
+    return detail::Fn<double, 20>(ls, ms, hs);
+  case 21:
+    return detail::Fn<double, 21>(ls, ms, hs);
+  case 22:
+    return detail::Fn<double, 22>(ls, ms, hs);
+  case 23:
+    return detail::Fn<double, 23>(ls, ms, hs);
+  case 24:
+    return detail::Fn<double, 24>(ls, ms, hs);
+  case 25:
+    return detail::Fn<double, 25>(ls, ms, hs);
+  case 26:
+    return detail::Fn<double, 26>(ls, ms, hs);
+  case 27:
+    return detail::Fn<double, 27>(ls, ms, hs);
+  case 28:
+    return detail::Fn<double, 28>(ls, ms, hs);
+  default:
+    std::cerr << "Boys function of order " << order << " not implemented"
+              << std::endl;
+    std::abort();
+  }
 }

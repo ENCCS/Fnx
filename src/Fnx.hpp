@@ -1,26 +1,16 @@
 #pragma once
 
+#include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <iomanip>
+#include <iostream>
 #include <type_traits>
 #include <vector>
 
 #include "pretabulated.hpp"
 #include "types.hpp"
 #include "utils.hpp"
-
-/**
- * Evaluate Boys function at single point.
- *
- * @tparam T scalar type of evaluation points and return values. Must be
- * floating point
- * @param[in] order order of the Boys function
- * @param[in] x evaluation point
- * @return value at point.
- */
-template <typename T,
-          typename = std::enable_if_t<std::is_floating_point<T>::value>>
-std::vector<T> boys_function(int32_t order, T x);
 
 /**
  * Evaluate Boys function at multiple points.
@@ -30,32 +20,115 @@ std::vector<T> boys_function(int32_t order, T x);
  * @param[in] order order of the Boys function
  * @param[in,out] x vector of evaluation points
  * @return vector of output values
- * @note the vector of evaluation points will be sorted in-place
  */
 template <typename T,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
 std::vector<T> boys_function(int32_t order, const std::vector<T> &xs);
 
+/**
+ * Evaluate Boys function at multiple points, pre-classifying them beforehand.
+ *
+ * @tparam T scalar type of evaluation points and return values. Must be
+ * floating point
+ * @param[in] order order of the Boys function
+ * @param[in,out] x vector of evaluation points
+ * @return vector of output values
+ */
+template <typename T,
+          typename = std::enable_if_t<std::is_floating_point<T>::value>>
+std::vector<T> boys_function_classify(int32_t order, const std::vector<T> &xs);
+
 namespace detail {
 /**
- * Evaluate Boys function at single point.
+ * Evaluate Boys function at multiple points.
  *
  * @tparam T scalar type of evaluation points and return values. Must be
  * floating point
  * @tparam order Order of the Boys function.
- * @param[in] x evaluation point
- * @param[in] table pretabulated values.
- * @return value at point.
+ * @param[in] x vector of evaluation points
+ * @return vector of output values
  */
 template <typename T, int32_t order,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline Values<T, order> Fn(T x, const Table &table) noexcept;
+inline std::vector<T> Fn(const std::vector<T> &xs) {
+  auto start = std::chrono::steady_clock::now();
 
+  constexpr auto offset = order + 1;
+
+  auto npoints = xs.size();
+
+  // this should be __constant__ memory directly on the GPU
+  constexpr auto table = tables::pretabulated<order>();
+
+  // this should be __constant__ memory directly on the GPU
+  constexpr auto ft = inverse_odd_numbers<T, order>();
+
+  auto ys = std::vector<double>(npoints * (order + 1), 0.0);
+
+  for (auto i = 0; i < npoints; ++i) {
+    auto x = xs[i];
+    auto p = grid_point(x);
+
+    if (p < 121) {
+      auto w = x - 0.1 * p;
+      auto y = horner(w, table[p]);
+
+      ys[order + i * offset] = y;
+      // downward recursion
+      for (auto o = order; o > 0; --o) {
+        ys[(o - 1) + i * offset] =
+            ft[o - 1] * 2.0 * x * ys[o + i * offset] + std::exp(-x);
+      }
+    } else if (p < 361 + order * 20) {
+      auto fia = 1.0 / x;
+
+      auto f = horner(fia, 0.0, 0.4999489092, -0.2473631686, +0.3211809090,
+                      -0.3811559346);
+
+      auto y = 0.5 * std::sqrt(M_PI) * std::sqrt(fia) - f * std::exp(-x);
+      ys[0 + i * offset] = y;
+      // upward recursion
+      for (auto o = 0; o <= order; ++o) {
+        ys[(o + 1) + i * offset] =
+            0.5 * fia * (ys[o + i * offset] - std::exp(-x));
+      }
+    } else {
+      auto fia = 1.0 / x;
+      // asymptotics can be either upward or downard. We go upward
+      auto y = 0.5 * std::sqrt(M_PI) * std::sqrt(fia);
+      ys[0 + i * offset] = y;
+      for (auto o = 0; o <= order; ++o) {
+        ys[(o + 1) + i * offset] = 0.5 * fia * ys[o + i * offset];
+      }
+    }
+  }
+
+  auto end = std::chrono::steady_clock::now();
+  std::chrono::duration<double, std::milli> diff = end - start;
+  std::cout << ">>> Time elapsed evaluating the Boys' function = "
+            << std::setw(9) << diff.count() << " ms\n";
+
+  return ys;
+}
+
+/**
+ * Evaluate Boys function at multiple, pre-classified points
+ *
+ * @tparam T scalar type of evaluation points and return values. Must be
+ * floating point
+ * @tparam order Order of the Boys function.
+ * @param[in] ls evaluation points in low range
+ * @param[in] ms evaluation points in mid range
+ * @param[in] hs evaluation points in high range
+ * @return values at points.
+ */
 template <typename T, int32_t order,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
 inline std::vector<T> Fn(const std::vector<Point<T>> &ls,
                          const std::vector<Point<T>> &ms,
-                         const std::vector<Point<T>> &hs) noexcept {
+                         const std::vector<Point<T>> &hs) {
+  auto start = std::chrono::steady_clock::now();
+
   constexpr auto offset = order + 1;
 
   // this should be __constant__ memory directly on the GPU
@@ -112,71 +185,11 @@ inline std::vector<T> Fn(const std::vector<Point<T>> &ls,
     }
   }
 
+  auto end = std::chrono::steady_clock::now();
+  std::chrono::duration<double, std::milli> diff = end - start;
+  std::cout << ">>> Time elapsed evaluating the Boys' function = "
+            << std::setw(9) << diff.count() << " ms\n";
+
   return vs;
-}
-
-/**
- * Evaluate Boys function at multiple points.
- *
- * @tparam T scalar type of evaluation points and return values. Must be
- * floating point
- * @tparam order Order of the Boys function.
- * @param[in] x vector of evaluation points
- * @return vector of output values
- */
-template <typename T, int32_t order,
-          typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline std::vector<T> Fn(const std::vector<T> &xs) noexcept {
-  constexpr auto offset = order + 1;
-
-  auto npoints = xs.size();
-
-  // this should be __constant__ memory directly on the GPU
-  constexpr auto table = tables::pretabulated<order>();
-
-  // this should be __constant__ memory directly on the GPU
-  constexpr auto ft = inverse_odd_numbers<T, order>();
-
-  auto ys = std::vector<double>(npoints * (order + 1), 0.0);
-
-  for (auto i = 0; i < npoints; ++i) {
-    auto x = xs[i];
-    auto p = grid_point(x);
-
-    if (p < 121) {
-      auto w = x - 0.1 * p;
-      auto y = horner(w, table[p]);
-
-      ys[order + i * offset] = y;
-      // downward recursion
-      for (auto o = order; o > 0; --o) {
-        ys[(o - 1) + i * offset] =
-            ft[o - 1] * 2.0 * x * ys[o + i * offset] + std::exp(-x);
-      }
-    } else if (p < 361 + order * 20) {
-      auto fia = 1.0 / x;
-
-      auto f = horner(fia, 0.0, 0.4999489092, -0.2473631686, +0.3211809090,
-                      -0.3811559346);
-
-      auto y = 0.5 * std::sqrt(M_PI) * std::sqrt(fia) - f * std::exp(-x);
-      ys[0 + i * offset] = y;
-      // upward recursion
-      for (auto o = 0; o <= order; ++o) {
-        ys[(o + 1) + i * offset] =
-            0.5 * fia * (ys[o + i * offset] - std::exp(-x));
-      }
-    } else {
-      auto fia = 1.0 / x;
-      // asymptotics can be either upward or downard. We go upward
-      auto y = 0.5 * std::sqrt(M_PI) * std::sqrt(fia);
-      ys[0 + i * offset] = y;
-      for (auto o = 0; o <= order; ++o) {
-        ys[(o + 1) + i * offset] = 0.5 * fia * ys[o + i * offset];
-      }
-    }
-  }
-
-  return ys;
 }
 } // namespace detail

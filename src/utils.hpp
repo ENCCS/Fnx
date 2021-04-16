@@ -11,7 +11,7 @@ namespace detail {
  * @param n index of the odd number.
  * @return odd number as double precision.
  */
-constexpr double odd_number(std::size_t n) noexcept {
+constexpr double odd_number(std::size_t n) {
   return static_cast<double>(2 * n + 1);
 }
 
@@ -20,7 +20,7 @@ constexpr double odd_number(std::size_t n) noexcept {
  * @param n index of the odd number.
  * @return inverse odd number as double precision.
  */
-constexpr double inverse_odd_number(std::size_t n) noexcept {
+constexpr double inverse_odd_number(std::size_t n) {
   return static_cast<double>(1.0 / (2 * n + 1));
 }
 
@@ -37,7 +37,7 @@ constexpr double inverse_odd_number(std::size_t n) noexcept {
  */
 template <typename T, std::size_t N, typename Generator, std::size_t... Is>
 constexpr std::array<T, N>
-fill_array_impl(const Generator &g, std::index_sequence<Is...>) noexcept {
+fill_array_impl(const Generator &g, std::index_sequence<Is...>) {
   return {{g(Is)...}};
 }
 
@@ -54,7 +54,7 @@ using Point = std::pair<typename std::vector<T>::difference_type, T>;
  */
 template <typename T,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline constexpr int32_t grid_point(T x) noexcept {
+inline constexpr int32_t grid_point(T x) {
   return (x > 1.0e5) ? 1000000 : static_cast<int32_t>(10.0 * x + 0.5);
 }
 
@@ -70,7 +70,7 @@ inline constexpr int32_t grid_point(T x) noexcept {
  */
 template <typename T, std::size_t N, typename Generator,
           typename Is = std::make_index_sequence<N>>
-constexpr std::array<T, N> fill_array(const Generator &g) noexcept {
+constexpr std::array<T, N> fill_array(const Generator &g) {
   return detail::fill_array_impl<T, N>(g, Is{});
 }
 
@@ -80,13 +80,13 @@ constexpr std::array<T, N> fill_array(const Generator &g) noexcept {
  * @tparam N size of the array
  */
 template <typename T, std::size_t N>
-constexpr std::array<T, N> inverse_odd_numbers() noexcept {
+constexpr std::array<T, N> inverse_odd_numbers() {
   return fill_array<T, N>(detail::inverse_odd_number);
 }
 
 /** Base case of Horner's scheme compile-time recursion (variadic
  * implementation). */
-template <typename X, typename T> constexpr X horner(X /* x */, T v) noexcept {
+template <typename X, typename T> constexpr X horner(X /* x */, T v) {
   return static_cast<X>(v);
 }
 
@@ -109,7 +109,7 @@ template <typename X, typename T> constexpr X horner(X /* x */, T v) noexcept {
  * @return value of polynomial at point
  */
 template <typename X, typename T, typename... Args>
-constexpr X horner(X x, T c0, Args... cs) noexcept {
+constexpr X horner(X x, T c0, Args... cs) {
   return static_cast<X>(c0) + x * horner(x, cs...);
 }
 
@@ -120,7 +120,7 @@ namespace detail {
  */
 template <typename T, std::size_t N, std::size_t... Is>
 constexpr T horner_impl(T x, const std::array<T, N> &coefs,
-                        std::index_sequence<Is...>) noexcept {
+                        std::index_sequence<Is...>) {
   return horner(x, coefs[Is]...);
 }
 } // namespace detail
@@ -144,6 +144,6 @@ constexpr T horner_impl(T x, const std::array<T, N> &coefs,
  * @return value of polynomial at point
  */
 template <typename T, std::size_t N, typename Is = std::make_index_sequence<N>>
-constexpr T horner(T x, const std::array<T, N> &c) noexcept {
+constexpr T horner(T x, const std::array<T, N> &c) {
   return detail::horner_impl(x, c, Is{});
 }

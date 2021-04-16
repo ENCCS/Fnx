@@ -1,8 +1,7 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
-
-#include "types.hpp"
 
 namespace tables {
 /**
@@ -11,7 +10,8 @@ namespace tables {
  * @tparam order Order of the table to fetch.
  * @return table of values.
  */
-template <int32_t order> inline constexpr Table pretabulated();
+template <int32_t order>
+inline constexpr std::array<std::array<double, 7>, 121> pretabulated();
 } // namespace tables
 
 #include "tables/F_00.hpp"

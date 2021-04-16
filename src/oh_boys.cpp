@@ -1,8 +1,6 @@
 #include <algorithm>
-#include <chrono>
 #include <cstdint>
 #include <cstdlib>
-#include <iomanip>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -14,6 +12,7 @@
 int main(int argc, char *argv[]) {
   // CLI set up
   int32_t order;
+  bool classify = false;
   auto npoints = 1e4;
   auto lower = 0.0;
   auto upper = 125.0;
@@ -22,6 +21,8 @@ int main(int argc, char *argv[]) {
   auto cli = lyra::help(show_help) |
              lyra::arg(order, "order")
                  .required()("Evaluation order of the Boys function") |
+             lyra::opt(classify)["-c"]["--classify"](
+                 "Classify points beforehand? (default false)") |
              lyra::opt(npoints, "npoints")["-n"]["--npoints"](
                  "How many evaluation points (default 1e4)") |
              lyra::opt(lower, "lower")["-l"]["--lower"](
@@ -49,6 +50,10 @@ int main(int argc, char *argv[]) {
   std::cout << "Evaluating the Boys function of order " << order << " on "
             << npoints << " random points in [" << lower << ", " << upper << "]"
             << std::endl;
+  if (classify) {
+    std::cout << ">>> Input points will be classified/partitiones beforehand"
+              << std::endl;
+  }
 
   std::random_device rd;
   std::mt19937 mt(rd());
@@ -64,15 +69,11 @@ int main(int argc, char *argv[]) {
             << (bytes * (order + 1)) / 1024 / 1024
             << " MiB of memory for the Boys' function values" << std::endl;
 
-  auto start = std::chrono::steady_clock::now();
-  auto boys = boys_function(order, xs);
-  auto end = std::chrono::steady_clock::now();
-
-  // PRINT_COLLECTION(boys, "reference values");
-
-  std::chrono::duration<double, std::milli> diff = end - start;
-  std::cout << ">>> Total elapsed time = " << std::setw(9) << diff.count()
-            << " ms\n ";
+  if (classify) {
+    auto boys = boys_function_classify(order, xs);
+  } else {
+    auto boys = boys_function(order, xs);
+  }
 
   return EXIT_SUCCESS;
 }

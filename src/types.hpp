@@ -5,10 +5,7 @@
 #include <type_traits>
 #include <utility>
 
-using Table = std::array<std::array<double, 7>, 121>;
-
-template <typename T, int32_t order> using Values = std::array<T, order + 1U>;
-
+/* Workarounds for C++11 */
 #if __cplusplus < 201402L
 namespace detail {
 template <std::size_t...> struct indexSequence {};
