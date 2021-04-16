@@ -54,15 +54,25 @@ int main(int argc, char *argv[]) {
   std::mt19937 mt(rd());
   std::uniform_real_distribution<double> dist(lower, upper);
 
-  auto v = std::vector<double>(npoints, 0.0);
-  std::generate(v.begin(), v.end(), [&dist, &mt]() { return dist(mt); });
+  auto xs = std::vector<double>(npoints, 0.0);
+  std::generate(xs.begin(), xs.end(), [&dist, &mt]() { return dist(mt); });
+
+  auto bytes = sizeof(decltype(xs.front())) * xs.capacity();
+  std::cout << ">>> Allocated ~" << bytes / 1024 / 1024
+            << " MiB of memory for the random points" << std::endl;
+  std::cout << ">>> Calculation will require ~"
+            << (bytes * (order + 1)) / 1024 / 1024
+            << " MiB of memory for the Boys' function values" << std::endl;
 
   auto start = std::chrono::steady_clock::now();
-  auto boys = boys_function(order, v);
+  auto boys = boys_function(order, xs);
   auto end = std::chrono::steady_clock::now();
 
+  // PRINT_COLLECTION(boys, "reference values");
+
   std::chrono::duration<double, std::milli> diff = end - start;
-  std::cout << ">>> Total elapsed time = " << std::setw(9) << diff.count() << " ms\n ";
+  std::cout << ">>> Total elapsed time = " << std::setw(9) << diff.count()
+            << " ms\n ";
 
   return EXIT_SUCCESS;
 }
