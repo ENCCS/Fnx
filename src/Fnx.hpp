@@ -13,40 +13,52 @@
 #include "utils.hpp"
 
 /**
- * Evaluate Boys function at multiple points.
+ * Evaluate Boys function at multiple points, using the McMurchie-Davidson
+ * algorithm.
  *
  * @tparam T scalar type of evaluation points and return values. Must be
  * floating point
  * @param[in] order order of the Boys function
  * @param[in,out] x vector of evaluation points
  * @return vector of output values
+ *
+ * See: McMurchie, L. E.; Davidson, E. R. J. Comput. Phys. 1978, 26, 218.
+ * https://doi.org/10.1016/0021-9991(78)90092-X
  */
 template <typename T,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-std::vector<T> boys_function(int32_t order, const std::vector<T> &xs);
+std::vector<T> boys_mmd(int32_t order, const std::vector<T> &xs);
 
 /**
- * Evaluate Boys function at multiple points, pre-classifying them beforehand.
+ * Evaluate Boys function at multiple points, pre-classifying them beforehand
+ * and using the McMurchie-Davidson algorithm.
  *
  * @tparam T scalar type of evaluation points and return values. Must be
  * floating point
  * @param[in] order order of the Boys function
  * @param[in,out] x vector of evaluation points
  * @return vector of output values
+ *
+ * See: McMurchie, L. E.; Davidson, E. R. J. Comput. Phys. 1978, 26, 218.
+ * https://doi.org/10.1016/0021-9991(78)90092-X
  */
 template <typename T,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-std::vector<T> boys_function_classify(int32_t order, const std::vector<T> &xs);
+std::vector<T> boys_mmd_classify(int32_t order, const std::vector<T> &xs);
 
-namespace detail {
+namespace mmd {
 /**
- * Evaluate Boys function at multiple points.
+ * Evaluate Boys function at multiple points, using the McMurchie-Davidson
+ * algorithm.
  *
  * @tparam T scalar type of evaluation points and return values. Must be
  * floating point
  * @tparam order Order of the Boys function.
  * @param[in] x vector of evaluation points
  * @return vector of output values
+ *
+ * See: McMurchie, L. E.; Davidson, E. R. J. Comput. Phys. 1978, 26, 218.
+ * https://doi.org/10.1016/0021-9991(78)90092-X
  */
 template <typename T, int32_t order,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
@@ -112,7 +124,8 @@ inline std::vector<T> Fn(const std::vector<T> &xs) {
 }
 
 /**
- * Evaluate Boys function at multiple, pre-classified points
+ * Evaluate Boys function at multiple, pre-classified points and using the
+ * McMurchie-Davidson algorithm.
  *
  * @tparam T scalar type of evaluation points and return values. Must be
  * floating point
@@ -121,12 +134,15 @@ inline std::vector<T> Fn(const std::vector<T> &xs) {
  * @param[in] ms evaluation points in mid range
  * @param[in] hs evaluation points in high range
  * @return values at points.
+ *
+ * See: McMurchie, L. E.; Davidson, E. R. J. Comput. Phys. 1978, 26, 218.
+ * https://doi.org/10.1016/0021-9991(78)90092-X
  */
 template <typename T, int32_t order,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline std::vector<T> Fn(const std::vector<Point<T>> &ls,
-                         const std::vector<Point<T>> &ms,
-                         const std::vector<Point<T>> &hs) {
+inline std::vector<T> Fn(const std::vector<detail::Point<T>> &ls,
+                         const std::vector<detail::Point<T>> &ms,
+                         const std::vector<detail::Point<T>> &hs) {
   auto start = std::chrono::steady_clock::now();
 
   constexpr auto offset = order + 1;
@@ -192,4 +208,4 @@ inline std::vector<T> Fn(const std::vector<Point<T>> &ls,
 
   return vs;
 }
-} // namespace detail
+} // namespace mmd

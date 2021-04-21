@@ -70,9 +70,9 @@ int main(int argc, char *argv[]) {
             << " MiB of memory for the Boys' function values" << std::endl;
 
   if (classify) {
-    auto boys = boys_function_classify(order, xs);
+    auto boys = boys_mmd_classify(order, xs);
   } else {
-    auto boys = boys_function(order, xs);
+    auto boys = boys_mmd(order, xs);
   }
 
   return EXIT_SUCCESS;

@@ -3,6 +3,8 @@
 #include <array>
 #include <cstdint>
 
+using Table = std::array<std::array<double, 7>, 121>;
+
 namespace tables {
 /**
  * Pretabulated values of given order.
@@ -11,7 +13,7 @@ namespace tables {
  * @return table of values.
  */
 template <int32_t order>
-inline constexpr std::array<std::array<double, 7>, 121> pretabulated();
+inline constexpr Table pretabulated();
 } // namespace tables
 
 #include "tables/F_00.hpp"

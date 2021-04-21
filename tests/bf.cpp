@@ -12,7 +12,7 @@ TEMPLATE_TEST_CASE_SIG("Boys function with small arguments", "[bf][small]",
   auto args = small_args();
   // res contains the values of the Boys function for orders 1 and below
   // we split it up into by-order arrays
-  const auto res = boys_function(order, args);
+  const auto res = boys_mmd(order, args);
 
   for (auto i = 0; i <= order; ++i) {
     auto res_to_order = extract<order>(i, res);
@@ -26,7 +26,7 @@ TEMPLATE_TEST_CASE_SIG("Boys function with medium arguments", "[bf][medium]",
   auto args = medium_args();
   // res contains the values of the Boys function for orders 1 and below
   // we split it up into by-order arrays
-  const auto res = boys_function(order, args);
+  const auto res = boys_mmd(order, args);
 
   for (auto i = 0; i <= order; ++i) {
     auto res_to_order = extract<order>(i, res);
@@ -40,7 +40,7 @@ TEMPLATE_TEST_CASE_SIG("Boys function with large arguments", "[bf][large]",
   auto args = large_args();
   // res contains the values of the Boys function for orders 1 and below
   // we split it up into by-order arrays
-  const auto res = boys_function(order, args);
+  const auto res = boys_mmd(order, args);
 
   for (auto i = 0; i <= order; ++i) {
     auto res_to_order = extract<order>(i, res);
