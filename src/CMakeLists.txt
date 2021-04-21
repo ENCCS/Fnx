@@ -10,6 +10,13 @@ target_include_directories(Fnx
     ${CMAKE_CURRENT_LIST_DIR}
   )
 
+if(Fnx_HAS_HIP)
+  target_link_libraries(Fnx
+    PUBLIC
+      hip::device
+    )
+endif()
+
 include(FetchContent)
 FetchContent_Declare(Lyra
   QUIET

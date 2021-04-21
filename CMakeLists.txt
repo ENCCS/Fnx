@@ -10,6 +10,19 @@ include(GNUInstallDirs)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
+
+option(Fnx_USE_HIP "Compile HIP GPU version" OFF)
+
+set(Fnx_HAS_HIP OFF)
+if(Fnx_USE_HIP)
+  find_package(hip REQUIRED)
+
+  if(hip_FOUND)
+    message(STATUS "Found HIP: " ${hip_VERSION})
+    set(Fnx_HAS_HIP ON)
+  endif()
+endif()
+
 add_subdirectory(src)
 
 enable_testing()
