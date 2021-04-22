@@ -65,15 +65,11 @@ template <typename T, int32_t order,
 inline std::vector<T> Fn(const std::vector<T> &xs) {
   auto start = std::chrono::steady_clock::now();
 
-  constexpr auto offset = order + 1;
+  constexpr auto ncols = order + 1;
 
   auto npoints = xs.size();
 
-  // this should be __constant__ memory directly on the GPU
   constexpr auto table = tables::pretabulated<order>();
-
-  // this should be __constant__ memory directly on the GPU
-  constexpr auto ft = inverse_odd_numbers<T, order>();
 
   auto ys = std::vector<double>(npoints * (order + 1), 0.0);
 
@@ -85,11 +81,11 @@ inline std::vector<T> Fn(const std::vector<T> &xs) {
       auto w = x - 0.1 * p;
       auto y = horner(w, table[p]);
 
-      ys[order + i * offset] = y;
+      ys[order + i * ncols] = y;
       // downward recursion
-      for (auto o = order; o > 0; --o) {
-        ys[(o - 1) + i * offset] =
-            ft[o - 1] * 2.0 * x * ys[o + i * offset] + std::exp(-x);
+      for (auto o = order - 1; o >= 0; --o) {
+        ys[o + i * ncols] =
+            (2.0 * x * ys[(o + 1) + i * ncols] + std::exp(-x)) / (2 * o + 1);
       }
     } else if (p < 361 + order * 20) {
       auto fia = 1.0 / x;
@@ -98,19 +94,19 @@ inline std::vector<T> Fn(const std::vector<T> &xs) {
                       -0.3811559346);
 
       auto y = 0.5 * std::sqrt(M_PI) * std::sqrt(fia) - f * std::exp(-x);
-      ys[0 + i * offset] = y;
+      ys[0 + i * ncols] = y;
       // upward recursion
-      for (auto o = 0; o <= order; ++o) {
-        ys[(o + 1) + i * offset] =
-            0.5 * fia * (ys[o + i * offset] - std::exp(-x));
+      for (auto o = 0; o < order; ++o) {
+        ys[(o + 1) + i * ncols] =
+            0.5 * fia * ((2 * o + 1) * ys[o + i * ncols] - std::exp(-x));
       }
     } else {
       auto fia = 1.0 / x;
       // asymptotics can be either upward or downard. We go upward
       auto y = 0.5 * std::sqrt(M_PI) * std::sqrt(fia);
-      ys[0 + i * offset] = y;
-      for (auto o = 0; o <= order; ++o) {
-        ys[(o + 1) + i * offset] = 0.5 * fia * ys[o + i * offset];
+      ys[0 + i * ncols] = y;
+      for (auto o = 0; o < order; ++o) {
+        ys[(o + 1) + i * ncols] = 0.5 * fia * (2 * o + 1) * ys[o + i * ncols];
       }
     }
   }

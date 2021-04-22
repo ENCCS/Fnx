@@ -50,6 +50,8 @@ int main(int argc, char *argv[]) {
   std::cout << "Evaluating the Boys function of order " << order << " on "
             << npoints << " random points in [" << lower << ", " << upper << "]"
             << std::endl;
+  // convert number of points to int32_t
+  npoints = static_cast<int32_t>(npoints);
   if (classify) {
     std::cout << ">>> Input points will be classified/partitiones beforehand"
               << std::endl;

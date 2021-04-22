@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <vector>
 
 #include "types.hpp"
 
@@ -36,8 +37,8 @@ constexpr double inverse_odd_number(std::size_t n) {
  * @param index sequence
  */
 template <typename T, std::size_t N, typename Generator, std::size_t... Is>
-constexpr std::array<T, N>
-fill_array_impl(const Generator &g, std::index_sequence<Is...>) {
+constexpr std::array<T, N> fill_array_impl(const Generator &g,
+                                           std::index_sequence<Is...>) {
   return {{g(Is)...}};
 }
 
