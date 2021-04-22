@@ -41,9 +41,6 @@ constexpr std::array<T, N> fill_array_impl(const Generator &g,
                                            std::index_sequence<Is...>) {
   return {{g(Is)...}};
 }
-
-template <typename T>
-using Point = std::pair<typename std::vector<T>::difference_type, T>;
 } // namespace detail
 
 /**
