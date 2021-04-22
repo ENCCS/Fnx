@@ -11,6 +11,10 @@ target_include_directories(Fnx
   )
 
 if(Fnx_HAS_HIP)
+  target_compile_definitions(Fnx
+    PUBLIC
+      Fnx_HAS_HIP
+    )
   target_link_libraries(Fnx
     PUBLIC
       hip::device
