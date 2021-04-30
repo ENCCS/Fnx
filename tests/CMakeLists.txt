@@ -8,6 +8,9 @@ FetchContent_MakeAvailable(Catch2)
 add_executable(unit_tests
     main.cpp
     testing_utils.cpp
+    reference_small_args.cpp
+    reference_medium_args.cpp
+    reference_large_args.cpp
     bf.cpp
     )
 
