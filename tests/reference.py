@@ -43,8 +43,8 @@ def generate(name, nargs, base, increment):
 
 if __name__ == "__main__":
     # small arguments
-    generate("small", 15, 0.0, 0.59)
+    generate("small", 1000, 0.0, 0.59)
     # medium arguments
-    generate("medium", 15, 9.2, 0.2)
+    generate("medium", 1000, 9.2, 0.2)
     # large arguments
-    generate("large", 15, 12.27, 7.0)
+    generate("large", 1000, 12.27, 7.0)

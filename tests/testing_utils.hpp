@@ -13,7 +13,7 @@ inline std::vector<double> generate_arguments(std::size_t nargs, double base,
 
   // add increment, starting from start element
   std::generate(std::next(args.begin(), start), args.end(),
-                  [&base, increment]() { return base += increment; });
+                [&base, increment]() { return base += increment; });
 
   return args;
 }
@@ -28,15 +28,15 @@ std::vector<double> ref_medium_args(int32_t order);
 std::vector<double> ref_large_args(int32_t order);
 
 inline std::vector<double> small_args() {
-  return detail::generate_arguments(15, 0.0, 0.59);
+  return detail::generate_arguments(1000, 0.0, 0.59);
 }
 
 inline std::vector<double> medium_args() {
-  return detail::generate_arguments(15, 9.2, 0.2);
+  return detail::generate_arguments(1000, 9.2, 0.2);
 }
 
 inline std::vector<double> large_args() {
-  return detail::generate_arguments(15, 5.27, 7.0, 0);
+  return detail::generate_arguments(1000, 5.27, 7.0, 0);
 }
 
 template <int32_t max_order>
