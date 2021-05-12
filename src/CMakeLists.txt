@@ -15,6 +15,10 @@ if(Fnx_HAS_HIP)
     PUBLIC
       Fnx_HAS_HIP
     )
+  target_sources(Fnx
+    PRIVATE
+      Fnx.hip.cpp
+  )
   target_link_libraries(Fnx
     PUBLIC
       hip::device

@@ -11,7 +11,7 @@
 #include "types.hpp"
 #include "utils.hpp"
 
-#define HIP_CHECK(cmd)                                                             \
+#define HIP_CHECK(cmd)                                                         \
   {                                                                            \
     hipError_t error = cmd;                                                    \
     if (error != hipSuccess) {                                                 \
