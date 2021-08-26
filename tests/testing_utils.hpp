@@ -1,7 +1,9 @@
 #pragma once
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
+#include <limits>
 #include <vector>
 
 namespace detail {
@@ -22,6 +24,21 @@ template <int32_t order> std::vector<double> ref_small_args();
 template <int32_t order> std::vector<double> ref_medium_args();
 template <int32_t order> std::vector<double> ref_large_args();
 } // namespace detail
+
+/** Floating-point comparison.
+ *
+ *  @tparam T
+ *
+ *  @param computed
+ *  @param expected
+ *  @param rtol
+ *  @param atol
+ */
+template <typename T>
+bool is_close(T computed, T expected,
+              T rtol = std::numeric_limits<T>::epsilon() * 100, T atol = 0.0) {
+  return (std::abs(computed - expected) <= atol + rtol * std::abs(expected));
+}
 
 std::vector<double> ref_small_args(int32_t order);
 std::vector<double> ref_medium_args(int32_t order);

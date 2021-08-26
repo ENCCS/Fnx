@@ -72,3 +72,72 @@ std::vector<double> boys_mmd(int32_t order, const std::vector<double> &xs) {
     std::abort();
   }
 }
+
+template <>
+std::vector<double> boys_tsmj(int32_t order, const std::vector<double> &xs) {
+  // compute Boys function
+  switch (order) {
+  case 0:
+    return tsmj::Fn<0, double>(xs);
+  case 1:
+    return tsmj::Fn<1, double>(xs);
+  case 2:
+    return tsmj::Fn<2, double>(xs);
+  case 3:
+    return tsmj::Fn<3, double>(xs);
+  case 4:
+    return tsmj::Fn<4, double>(xs);
+  case 5:
+    return tsmj::Fn<5, double>(xs);
+  case 6:
+    return tsmj::Fn<6, double>(xs);
+  case 7:
+    return tsmj::Fn<7, double>(xs);
+  case 8:
+    return tsmj::Fn<8, double>(xs);
+  case 9:
+    return tsmj::Fn<9, double>(xs);
+  case 10:
+    return tsmj::Fn<10, double>(xs);
+  case 11:
+    return tsmj::Fn<11, double>(xs);
+  case 12:
+    return tsmj::Fn<12, double>(xs);
+  case 13:
+    return tsmj::Fn<13, double>(xs);
+  case 14:
+    return tsmj::Fn<14, double>(xs);
+  case 15:
+    return tsmj::Fn<15, double>(xs);
+  case 16:
+    return tsmj::Fn<16, double>(xs);
+  case 17:
+    return tsmj::Fn<17, double>(xs);
+  case 18:
+    return tsmj::Fn<18, double>(xs);
+  case 19:
+    return tsmj::Fn<19, double>(xs);
+  case 20:
+    return tsmj::Fn<20, double>(xs);
+  case 21:
+    return tsmj::Fn<21, double>(xs);
+  case 22:
+    return tsmj::Fn<22, double>(xs);
+  case 23:
+    return tsmj::Fn<23, double>(xs);
+  case 24:
+    return tsmj::Fn<24, double>(xs);
+  case 25:
+    return tsmj::Fn<25, double>(xs);
+  case 26:
+    return tsmj::Fn<26, double>(xs);
+  case 27:
+    return tsmj::Fn<27, double>(xs);
+  case 28:
+    return tsmj::Fn<28, double>(xs);
+  default:
+    std::cerr << "Boys function of order " << order << " not implemented"
+              << std::endl;
+    std::abort();
+  }
+}

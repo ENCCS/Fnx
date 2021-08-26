@@ -12,8 +12,7 @@ namespace tables {
  * @tparam order Order of the table to fetch.
  * @return table of values.
  */
-template <int32_t order>
-inline constexpr Table pretabulated();
+template <int32_t order> inline constexpr Table pretabulated();
 } // namespace tables
 
 #include "tables/F_00.hpp"
