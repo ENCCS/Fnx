@@ -20,11 +20,12 @@ namespace detail {{
 """
 
 
-def generate(name, nargs, base, increment):
+def generate(name, nargs, start, end):
     max_order = 28
-    base = Float(base)
-    increment = Float(increment)
-    args = list(accumulate(repeat(base, nargs), func=lambda x, _: x + increment))
+    start = Float(start)
+    end = Float(end)
+    increment = (end - start) / (nargs - 1)
+    args = [start + increment*n for n, x in enumerate(range(nargs))]
     ls = []
     for order in range(max_order + 1):
         ys = [Float(0.0)] * nargs
@@ -43,8 +44,8 @@ def generate(name, nargs, base, increment):
 
 if __name__ == "__main__":
     # small arguments
-    generate("small", 1000, 0.0, 0.59)
+    generate("small", 1000, 0.0, 12.0)
     # medium arguments
-    generate("medium", 1000, 9.2, 0.2)
+    generate("medium", 1000, 12.01, 30.0)
     # large arguments
-    generate("large", 1000, 12.27, 7.0)
+    generate("large", 1000, 30.01, 150.0)
