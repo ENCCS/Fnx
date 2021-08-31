@@ -27,6 +27,9 @@ TEMPLATE_TEST_CASE_SIG(
       INFO("Evaluation point " << j << " (" << args[j] << ")");
       INFO("computed = " << std::setprecision(25) << res_to_order[j]);
       INFO("expected = " << std::setprecision(25) << refs[j]);
+      INFO("std::abs(computed - expected) = "
+           << std::setprecision(5) << std::scientific
+           << std::abs(res_to_order[j] - refs[j]));
       CHECK(is_close(res_to_order[j], refs[j], 0.0, 1e-14));
     }
   }
@@ -52,6 +55,9 @@ TEMPLATE_TEST_CASE_SIG(
       INFO("Evaluation point " << j << " (" << args[j] << ")");
       INFO("computed = " << std::setprecision(25) << res_to_order[j]);
       INFO("expected = " << std::setprecision(25) << refs[j]);
+      INFO("std::abs(computed - expected) = "
+           << std::setprecision(5) << std::scientific
+           << std::abs(res_to_order[j] - refs[j]));
       CHECK(is_close(res_to_order[j], refs[j], 0.0, 1e-14));
     }
   }
@@ -77,6 +83,9 @@ TEMPLATE_TEST_CASE_SIG(
       INFO("Evaluation point " << j << " (" << args[j] << ")");
       INFO("computed = " << std::setprecision(25) << res_to_order[j]);
       INFO("expected = " << std::setprecision(25) << refs[j]);
+      INFO("std::abs(computed - expected) = "
+           << std::setprecision(5) << std::scientific
+           << std::abs(res_to_order[j] - refs[j]));
       CHECK(is_close(res_to_order[j], refs[j], 0.0, 1e-14));
     }
   }
@@ -102,6 +111,9 @@ TEMPLATE_TEST_CASE_SIG(
       INFO("Evaluation point " << j << " (" << args[j] << ")");
       INFO("computed = " << std::setprecision(25) << res_to_order[j]);
       INFO("expected = " << std::setprecision(25) << refs[j]);
+      INFO("std::abs(computed - expected) = "
+           << std::setprecision(5) << std::scientific
+           << std::abs(res_to_order[j] - refs[j]));
       CHECK(is_close(res_to_order[j], refs[j], 0.0, 1e-14));
     }
   }
@@ -127,6 +139,9 @@ TEMPLATE_TEST_CASE_SIG(
       INFO("Evaluation point " << j << " (" << args[j] << ")");
       INFO("computed = " << std::setprecision(25) << res_to_order[j]);
       INFO("expected = " << std::setprecision(25) << refs[j]);
+      INFO("std::abs(computed - expected) = "
+           << std::setprecision(5) << std::scientific
+           << std::abs(res_to_order[j] - refs[j]));
       CHECK(is_close(res_to_order[j], refs[j], 0.0, 1e-14));
     }
   }
@@ -152,6 +167,9 @@ TEMPLATE_TEST_CASE_SIG(
       INFO("Evaluation point " << j << " (" << args[j] << ")");
       INFO("computed = " << std::setprecision(25) << res_to_order[j]);
       INFO("expected = " << std::setprecision(25) << refs[j]);
+      INFO("std::abs(computed - expected) = "
+           << std::setprecision(5) << std::scientific
+           << std::abs(res_to_order[j] - refs[j]));
       CHECK(is_close(res_to_order[j], refs[j], 0.0, 1e-14));
     }
   }

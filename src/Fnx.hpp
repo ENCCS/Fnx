@@ -144,7 +144,7 @@ inline auto Fn(const std::vector<T> &xs)
   constexpr auto inverse_odds = inverse_odd_numbers<T, order + 1>();
 
   // TODO leave it hardcoded?
-  constexpr auto k_max = 30;
+  constexpr auto k_max = 35;
 
   // precompute coefficients for the MML Taylor expansion
   auto coefs = fill_array<double, k_max>([](int k) {
@@ -168,10 +168,9 @@ inline auto Fn(const std::vector<T> &xs)
 
       ys[0 + i * ncols] = F_0_x;
 
-      // Mazur-Makowski-Lazarski, i.e. Taylor expansion to order k_max
-      // for the highest order followed by downward recursion
-      if (x <= TS_15<order>) {
       if (use_taylor) {
+        // Mazur-Makowski-Lazarski, i.e. Taylor expansion to order k_max
+        // for the highest order followed by downward recursion
         ys[order + i * ncols] = horner(x, coefs);
 
         auto exp_mx = std::exp(-x);

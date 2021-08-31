@@ -10,10 +10,13 @@ namespace detail {
 inline std::vector<double> generate_arguments(std::size_t nargs, double start,
                                               double end) {
   auto args = std::vector<double>(nargs, 0.0);
-  auto inc = static_cast<double>((end - start) /  (nargs-1));
+  auto inc = static_cast<double>((end - start) / (nargs - 1));
 
   auto n = -1; // in C++14 I could do n = -1 in the capture list...
-  std::generate(args.begin(), args.end(), [start, inc, n] () mutable { n++; return start+inc*n; });
+  std::generate(args.begin(), args.end(), [start, inc, n]() mutable {
+    n++;
+    return start + inc * n;
+  });
 
   return args;
 }
