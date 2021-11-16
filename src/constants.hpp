@@ -1,187 +1,1670 @@
 #pragma once
 
-template <int32_t order> constexpr double TS_13{};
+#include <array>
 
-/**@{ Thresholds beyond which the finite sum upward recursion yields relative
- * errors <= 1.0e-13 */
-/** Threshold for Boys function of order 1 */
-template <> inline constexpr double TS_13<1>{0.0083359539129440802909810};
-/** Threshold for Boys function of order 2 */
-template <> inline constexpr double TS_13<2>{0.1483677058333275256943842};
-/** Threshold for Boys function of order 3 */
-template <> inline constexpr double TS_13<3>{0.4468891297665036527315762};
-/** Threshold for Boys function of order 4 */
-template <> inline constexpr double TS_13<4>{0.8422551749252363128972224};
-/** Threshold for Boys function of order 5 */
-template <> inline constexpr double TS_13<5>{1.2987498970390662893975220};
-/** Threshold for Boys function of order 6 */
-template <> inline constexpr double TS_13<6>{1.7982063155907441940850110};
-/** Threshold for Boys function of order 7 */
-template <> inline constexpr double TS_13<7>{2.3306728683535954184097800};
-/** Threshold for Boys function of order 8 */
-template <> inline constexpr double TS_13<8>{2.8901038705608355002121170};
-/** Threshold for Boys function of order 9 */
-template <> inline constexpr double TS_13<9>{3.4724184675192165228430210};
-/** Threshold for Boys function of order 10 */
-template <> inline constexpr double TS_13<10>{4.0746011964882191724360590};
-/** Threshold for Boys function of order 11 */
-template <> inline constexpr double TS_13<11>{4.6942731133656686228949190};
-/** Threshold for Boys function of order 12 */
-template <> inline constexpr double TS_13<12>{5.3294795254653956293754380};
-/** Threshold for Boys function of order 13 */
-template <> inline constexpr double TS_13<13>{5.9785775458091405455211740};
-/** Threshold for Boys function of order 14 */
-template <> inline constexpr double TS_13<14>{6.6401695502402973508932960};
-/** Threshold for Boys function of order 15 */
-template <> inline constexpr double TS_13<15>{7.3130582336632937600288150};
-/** Threshold for Boys function of order 16 */
-template <> inline constexpr double TS_13<16>{7.9962127322635060446370520};
-/** Threshold for Boys function of order 17 */
-template <> inline constexpr double TS_13<17>{8.6887413898241819368477650};
-/** Threshold for Boys function of order 18 */
-template <> inline constexpr double TS_13<18>{9.3898692705262431756785280};
-/** Threshold for Boys function of order 19 */
-template <> inline constexpr double TS_13<19>{10.0989194732002313395711600};
-/** Threshold for Boys function of order 20 */
-template <> inline constexpr double TS_13<20>{10.8152976306961921000006500};
-/** Threshold for Boys function of order 21 */
-template <> inline constexpr double TS_13<21>{11.5384790930459151404748400};
-/** Threshold for Boys function of order 22 */
-template <> inline constexpr double TS_13<22>{12.2679983518110252462708700};
-/** Threshold for Boys function of order 23 */
-template <> inline constexpr double TS_13<23>{13.0034403148974800081488300};
-/** Threshold for Boys function of order 24 */
-template <> inline constexpr double TS_13<24>{13.7444330953929901225250500};
-/** Threshold for Boys function of order 25 */
-template <> inline constexpr double TS_13<25>{14.4906420321716611898394100};
-/** Threshold for Boys function of order 26 */
-template <> inline constexpr double TS_13<26>{15.2417647102876093867525600};
-/** Threshold for Boys function of order 27 */
-template <> inline constexpr double TS_13<27>{15.9975267931685717536422700};
-/** Threshold for Boys function of order 28 */
-template <> inline constexpr double TS_13<28>{16.7576785155530562167119100};
+/** Threshold beyond which the finite sum upward recursion is safe.
+ * These are computed using the estimate in J. Chem. Phys. 2021, 155, 174117
+ */
+template <int32_t order>
+__constant__ constexpr double Ts{};
+
+/** Numerator of Padé approximant */
+template <int32_t order>
+__constant__ constexpr std::array<double, 16> Ps{{}};
+/** Denominator of Padé approximant */
+template <int32_t order>
+__constant__ constexpr std::array<double, 17> Qs{{}};
+
+template <>
+__constant__ inline constexpr auto Ts<1>{0.5000000000000000000000000};
+template <>
+__constant__ inline constexpr auto Ts<2>{0.8660254037844385965883021};
+template <>
+__constant__ inline constexpr auto Ts<3>{1.233106037165235147057274};
+template <>
+__constant__ inline constexpr auto Ts<4>{1.600542936471839317036370};
+template <>
+__constant__ inline constexpr auto Ts<5>{1.968141713517675972511256};
+template <>
+__constant__ inline constexpr auto Ts<6>{2.335827425473377960685184};
+template <>
+__constant__ inline constexpr auto Ts<7>{2.703565149324218541693199};
+template <>
+__constant__ inline constexpr auto Ts<8>{3.071336439839370768822846};
+template <>
+__constant__ inline constexpr auto Ts<9>{3.439130644291552130198397};
+template <>
+__constant__ inline constexpr auto Ts<10>{3.806941183246761006842007};
+template <>
+__constant__ inline constexpr auto Ts<11>{4.174763774674143945730975};
+template <>
+__constant__ inline constexpr auto Ts<12>{4.542595512197176610413862};
+template <>
+__constant__ inline constexpr auto Ts<13>{4.910434353972319421188786};
+template <>
+__constant__ inline constexpr auto Ts<14>{5.278278823606475711471830};
+template <>
+__constant__ inline constexpr auto Ts<15>{5.646127827158552214825704};
+template <>
+__constant__ inline constexpr auto Ts<16>{6.013980536868685611295859};
+template <>
+__constant__ inline constexpr auto Ts<17>{6.381836314862423975569072};
+template <>
+__constant__ inline constexpr auto Ts<18>{6.749694661668325323944373};
+template <>
+__constant__ inline constexpr auto Ts<19>{7.117555180620057875273687};
+template <>
+__constant__ inline constexpr auto Ts<20>{7.485417552705927235479066};
+template <>
+__constant__ inline constexpr auto Ts<21>{7.853281518456118881488237};
+template <>
+__constant__ inline constexpr auto Ts<22>{8.221146864672833842746513};
+template <>
+__constant__ inline constexpr auto Ts<23>{8.589013414557307157792820};
+template <>
+__constant__ inline constexpr auto Ts<24>{8.956881020260979653357936};
+template <>
+__constant__ inline constexpr auto Ts<25>{9.324749557193653615172479};
+template <>
+__constant__ inline constexpr auto Ts<26>{9.692618919623589235357031};
+template <>
+__constant__ inline constexpr auto Ts<27>{10.06048901723990063317160};
+template <>
+__constant__ inline constexpr auto Ts<28>{10.42835977244036094191415};
+template <>
+__constant__ inline constexpr auto Ts<29>{10.79623111817214820007393};
+template <>
+__constant__ inline constexpr auto Ts<30>{11.16410299619825075012614};
+template <>
+__constant__ inline constexpr auto Ts<31>{11.53197535569491272156029};
+template <>
+__constant__ inline constexpr auto Ts<32>{11.89984815210849511402103};
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 1 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<1> = std::array<double, 16>{{3.33333333333333333333e-1,
+                                                                   -5.76128654234092651976e-3,
+                                                                   8.87036093270972270108e-3,
+                                                                   2.51864254704159754028e-4,
+                                                                   4.50997530287390244186e-5,
+                                                                   4.34732369679781806369e-6,
+                                                                   -1.34706769187909229050e-8,
+                                                                   1.97815851195459038034e-8,
+                                                                   -4.03572753944175967102e-10,
+                                                                   3.51377149287940183138e-11,
+                                                                   -6.78534399693366462386e-13,
+                                                                   2.53970424849712248737e-14,
+                                                                   -3.61567723915018550672e-16,
+                                                                   6.26737797625892542908e-18,
+                                                                   -4.86516037962111021730e-20,
+                                                                   2.38091150727482591575e-22}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<1> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   5.82716140372977253747e-1,
+                                                                   1.61955052736201254859e-1,
+                                                                   2.86164355957508123596e-2,
+                                                                   3.60998900475277637728e-3,
+                                                                   3.45747562441140897285e-4,
+                                                                   2.60728884588224157535e-5,
+                                                                   1.58292657224956592914e-6,
+                                                                   7.83716541036208996029e-8,
+                                                                   3.18208434348955088874e-9,
+                                                                   1.05844558586982898914e-10,
+                                                                   2.86064173228144111756e-12,
+                                                                   6.17358583856953122491e-14,
+                                                                   1.03115595237200960118e-15,
+                                                                   1.26064189792657103183e-17,
+                                                                   1.01095200906545171082e-19,
+                                                                   4.01961576255869890101e-22}};
 /**@}*/
 
-template <int32_t order> constexpr double TS_14{};
-
-/**@{ Thresholds beyond which the finite sum upward recursion yields relative
- * errors <= 1.0e-14 */
-/** Threshold for Boys function of order 1 */
-template <> inline constexpr double TS_14<1>{0.0842289602844362981561397};
-/** Threshold for Boys function of order 2 */
-template <> inline constexpr double TS_14<2>{0.5003451750053743607295222};
-/** Threshold for Boys function of order 3 */
-template <> inline constexpr double TS_14<3>{1.0583694968977321096560450};
-/** Threshold for Boys function of order 4 */
-template <> inline constexpr double TS_14<4>{1.6750158810668407917253280};
-/** Threshold for Boys function of order 5 */
-template <> inline constexpr double TS_14<5>{2.3265075887772442495988270};
-/** Threshold for Boys function of order 6 */
-template <> inline constexpr double TS_14<6>{3.0037376825087475888478400};
-/** Threshold for Boys function of order 7 */
-template <> inline constexpr double TS_14<7>{3.7019853047433407630701530};
-/** Threshold for Boys function of order 8 */
-template <> inline constexpr double TS_14<8>{4.4181037270685214832573930};
-/** Threshold for Boys function of order 9 */
-template <> inline constexpr double TS_14<9>{5.1496628738776405176627610};
-/** Threshold for Boys function of order 10 */
-template <> inline constexpr double TS_14<10>{5.8946681974842429889185320};
-/** Threshold for Boys function of order 11 */
-template <> inline constexpr double TS_14<11>{6.6514528311865436355181700};
-/** Threshold for Boys function of order 12 */
-template <> inline constexpr double TS_14<12>{7.4186193647985479735843880};
-/** Threshold for Boys function of order 13 */
-template <> inline constexpr double TS_14<13>{8.1949957283110543224954200};
-/** Threshold for Boys function of order 14 */
-template <> inline constexpr double TS_14<14>{8.9795969896727078690907210};
-/** Threshold for Boys function of order 15 */
-template <> inline constexpr double TS_14<15>{9.7715921148436764561194670};
-/** Threshold for Boys function of order 16 */
-template <> inline constexpr double TS_14<16>{10.5702758553146870652322300};
-/** Threshold for Boys function of order 17 */
-template <> inline constexpr double TS_14<17>{11.3750456107774717507044800};
-/** Threshold for Boys function of order 18 */
-template <> inline constexpr double TS_14<18>{12.1853827365098142636077300};
-/** Threshold for Boys function of order 19 */
-template <> inline constexpr double TS_14<19>{13.0008375922732696942855200};
-/** Threshold for Boys function of order 20 */
-template <> inline constexpr double TS_14<20>{13.8210176239508920073901800};
-/** Threshold for Boys function of order 21 */
-template <> inline constexpr double TS_14<21>{14.6455778499282601817043400};
-/** Threshold for Boys function of order 22 */
-template <> inline constexpr double TS_14<22>{15.4742132333089567029346000};
-/** Threshold for Boys function of order 23 */
-template <> inline constexpr double TS_14<23>{16.3066525276783553323323000};
-/** Threshold for Boys function of order 24 */
-template <> inline constexpr double TS_14<24>{17.1426532757364654146174500};
-/** Threshold for Boys function of order 25 */
-template <> inline constexpr double TS_14<25>{17.9819977138635616649749200};
-/** Threshold for Boys function of order 26 */
-template <> inline constexpr double TS_14<26>{18.8244893930083095108100100};
-/** Threshold for Boys function of order 27 */
-template <> inline constexpr double TS_14<27>{19.6699503700489401311293700};
-/** Threshold for Boys function of order 28 */
-template <> inline constexpr double TS_14<28>{20.5182188569208513606976000};
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 2 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<2> = std::array<double, 16>{{2.00000000000000000000e-1,
+                                                                   -1.80858166219357435756e-1,
+                                                                   3.83488010046158928068e-2,
+                                                                   -6.69381569291643482855e-3,
+                                                                   7.09344246878152676766e-4,
+                                                                   -6.35621452555462239549e-5,
+                                                                   4.16580150909062264016e-6,
+                                                                   -2.31313690949643275865e-7,
+                                                                   1.00459097935651672556e-8,
+                                                                   -3.64948707096328362350e-10,
+                                                                   1.05278351223902497257e-11,
+                                                                   -2.45258343830978639521e-13,
+                                                                   4.38376488707510410481e-15,
+                                                                   -5.77252512623960817382e-17,
+                                                                   4.98923957153504046278e-19,
+                                                                   -2.15047262849666651781e-21}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<2> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   -1.90005116811072932714e-1,
+                                                                   -2.21751713334036093528e-1,
+                                                                   -6.33263845457023855090e-2,
+                                                                   -1.05086804924076401141e-2,
+                                                                   -1.20998935363969550849e-3,
+                                                                   -1.04399930769828481070e-4,
+                                                                   -7.03269031637529027485e-6,
+                                                                   -3.78474250110024853400e-7,
+                                                                   -1.64628000673085821333e-8,
+                                                                   -5.80444044738784779663e-10,
+                                                                   -1.64961303330976225019e-11,
+                                                                   -3.72063681526851945360e-13,
+                                                                   -6.46386602243105767973e-15,
+                                                                   -8.18888742531902161092e-17,
+                                                                   -6.78513929118043794322e-19,
+                                                                   -2.78114734300972182397e-21}};
 /**@}*/
 
-template <int32_t order> constexpr double TS_15{};
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 3 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<3> = std::array<double, 16>{{1.42857142857142857143e-1,
+                                                                   -4.04822970190635428311e-2,
+                                                                   7.40831739144090853366e-3,
+                                                                   -8.87638832312599972835e-4,
+                                                                   8.15052929717493450726e-5,
+                                                                   -5.79460583117763979879e-6,
+                                                                   3.33659410261170554120e-7,
+                                                                   -1.56327627912631617865e-8,
+                                                                   6.03714643148654075626e-10,
+                                                                   -1.91520489801718538624e-11,
+                                                                   4.96445664795304516125e-13,
+                                                                   -1.03343349821527611095e-14,
+                                                                   1.67771601827062273884e-16,
+                                                                   -2.01242221751950627739e-18,
+                                                                   1.60320807594234917812e-20,
+                                                                   -6.44145896745997785864e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<3> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   4.94401698644332920907e-1,
+                                                                   1.18211058059415979882e-1,
+                                                                   1.81624205767807571366e-2,
+                                                                   2.00919355076117391035e-3,
+                                                                   1.69882736646063373272e-4,
+                                                                   1.13707565247513553761e-5,
+                                                                   6.15378654822746325393e-7,
+                                                                   2.72528568625772125049e-8,
+                                                                   9.92441395760857733802e-10,
+                                                                   2.96683666663703744741e-11,
+                                                                   7.21717585067645822524e-13,
+                                                                   1.40328133045169744867e-14,
+                                                                   2.11277478385344844872e-16,
+                                                                   2.32842928771373951475e-18,
+                                                                   1.68256397156174101761e-20,
+                                                                   6.02319958288049939975e-23}};
+/**@}*/
 
-/**@{ Thresholds beyond which the finite sum upward recursion yields relative
- * errors <= 1.0e-15 */
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 4 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<4> = std::array<double, 16>{{1.11111111111111111111e-1,
+                                                                   -5.89547660695391509411e-2,
+                                                                   1.40416719702555412019e-2,
+                                                                   -2.17688627719648045145e-3,
+                                                                   2.41661940982750028271e-4,
+                                                                   -2.05367766817718698296e-5,
+                                                                   1.37728396631608008071e-6,
+                                                                   -7.44555747089978161550e-8,
+                                                                   3.27442150948243500951e-9,
+                                                                   -1.17425743581395118780e-10,
+                                                                   3.41311973165669533104e-12,
+                                                                   -7.91784894365249389260e-14,
+                                                                   1.42337478585796277343e-15,
+                                                                   -1.87859381900077565303e-17,
+                                                                   1.63456842640798941100e-19,
+                                                                   -7.10460775288814211591e-22}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<4> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   2.87588923555965880752e-1,
+                                                                   1.55212299424257963582e-2,
+                                                                   -6.44280036019834623923e-3,
+                                                                   -1.76908925946891179906e-3,
+                                                                   -2.46449430729434688578e-4,
+                                                                   -2.35466047005982336471e-5,
+                                                                   -1.69053404055472862876e-6,
+                                                                   -9.50348170046409479952e-8,
+                                                                   -4.26706403553985718409e-9,
+                                                                   -1.54119338314688377944e-10,
+                                                                   -4.46384292093049450202e-12,
+                                                                   -1.02233172341288320507e-13,
+                                                                   -1.79872288182737305786e-15,
+                                                                   -2.30325400217528581917e-17,
+                                                                   -1.92612437751825195564e-19,
+                                                                   -7.95951190945992038913e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 5 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<5> = std::array<double, 16>{{9.09090909090909090909e-2,
+                                                                   -3.09897047662601662910e-2,
+                                                                   5.69590399074943430635e-3,
+                                                                   -6.98475476087864277988e-4,
+                                                                   6.32227030138942627975e-5,
+                                                                   -4.42949151653222535801e-6,
+                                                                   2.47098565750771588460e-7,
+                                                                   -1.11365130481460105007e-8,
+                                                                   4.07786785971469804701e-10,
+                                                                   -1.20976369216167028342e-11,
+                                                                   2.87328377677756126435e-13,
+                                                                   -5.33270946329470195560e-15,
+                                                                   7.40136061154999405780e-17,
+                                                                   -7.07609232609064940369e-19,
+                                                                   3.90747837013952614220e-21,
+                                                                   -7.24514581242036664322e-24}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<5> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   5.05267093724984350800e-1,
+                                                                   1.23521971921948539586e-1,
+                                                                   1.94138976117053281556e-2,
+                                                                   2.19798568284485049823e-3,
+                                                                   1.90296251167615225333e-4,
+                                                                   1.30485959828135674452e-5,
+                                                                   7.23812912484978874421e-7,
+                                                                   3.28715615756250228927e-8,
+                                                                   1.22814402208422711608e-9,
+                                                                   3.76859932442916396277e-11,
+                                                                   9.41438003846658370876e-13,
+                                                                   1.88056857237255451956e-14,
+                                                                   2.90990509187219676500e-16,
+                                                                   3.29687054450064429369e-18,
+                                                                   2.44971168329004146181e-20,
+                                                                   9.01799486966702488841e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 6 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<6> = std::array<double, 16>{{7.69230769230769230769e-2,
+                                                                   -2.59308160942508664215e-2,
+                                                                   4.54854270570909276217e-3,
+                                                                   -5.24116785029363381476e-4,
+                                                                   4.37294490231299854376e-5,
+                                                                   -2.76117126518952635261e-6,
+                                                                   1.34467946796580196817e-7,
+                                                                   -5.03704686882843060535e-9,
+                                                                   1.40460038453054299841e-10,
+                                                                   -2.60615677734552235648e-12,
+                                                                   1.62273436153259731655e-14,
+                                                                   7.91086292590411623605e-16,
+                                                                   -3.19450951847139030623e-17,
+                                                                   6.17607672198725112515e-19,
+                                                                   -6.77668022749348438441e-21,
+                                                                   3.42890977343551532111e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<6> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   5.29566057441405391160e-1,
+                                                                   1.35735363780298934344e-1,
+                                                                   2.23777451802264736036e-2,
+                                                                   2.65917411695095959323e-3,
+                                                                   2.41822740038970224836e-4,
+                                                                   1.74329645454033412358e-5,
+                                                                   1.01776108021296576446e-6,
+                                                                   4.87088448849785735840e-8,
+                                                                   1.92068205005136032809e-9,
+                                                                   6.23107349629138421680e-11,
+                                                                   1.64904350844061822952e-12,
+                                                                   3.49791616509591072426e-14,
+                                                                   5.76323403526500168536e-16,
+                                                                   6.97490398987584785736e-18,
+                                                                   5.55665362660730416549e-20,
+                                                                   2.20273581317268736988e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 7 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<7> = std::array<double, 16>{{6.66666666666666666667e-2,
+                                                                   -2.26161131517023591964e-2,
+                                                                   3.85929925561364142728e-3,
+                                                                   -4.22480854530941267802e-4,
+                                                                   3.23315723812729388306e-5,
+                                                                   -1.76082132541189041969e-6,
+                                                                   6.42576941805080353382e-8,
+                                                                   -1.04412568629887281044e-9,
+                                                                   -4.48616388452807359064e-11,
+                                                                   4.41919422937827858397e-12,
+                                                                   -1.99965580806760518374e-13,
+                                                                   6.11004341921758286338e-15,
+                                                                   -1.33585525806119095748e-16,
+                                                                   2.04801528718914877589e-18,
+                                                                   -2.01036295424756939980e-20,
+                                                                   9.66598244472169498050e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<7> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   5.43111243900935236617e-1,
+                                                                   1.42368450170943156019e-1,
+                                                                   2.39436096394058800518e-2,
+                                                                   2.89580295845033759694e-3,
+                                                                   2.67450385565834653553e-4,
+                                                                   1.95424996877229213493e-5,
+                                                                   1.15427154996786148866e-6,
+                                                                   5.57897734978852673159e-8,
+                                                                   2.21793833256037928421e-9,
+                                                                   7.24251366197340536958e-11,
+                                                                   1.92615344026645364988e-12,
+                                                                   4.09927771459569087936e-14,
+                                                                   6.76565462112522661614e-16,
+                                                                   8.18890874599791562132e-18,
+                                                                   6.51371146542051311466e-20,
+                                                                   2.57374036423261164115e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 8 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<8> = std::array<double, 16>{{5.88235294117647058824e-2,
+                                                                   -2.34026411246423503287e-2,
+                                                                   4.68127720138690386203e-3,
+                                                                   -6.15565404089962438586e-4,
+                                                                   5.91495789113108286304e-5,
+                                                                   -4.38585079958796341553e-6,
+                                                                   2.58857160654984423804e-7,
+                                                                   -1.23770919930463973018e-8,
+                                                                   4.83454693325465440186e-10,
+                                                                   -1.54365571287325904830e-11,
+                                                                   4.00024338491965073532e-13,
+                                                                   -8.27309476408799438384e-15,
+                                                                   1.32385371757356396815e-16,
+                                                                   -1.54992933607222635590e-18,
+                                                                   1.18891724960679418975e-20,
+                                                                   -4.50741333238803003820e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<8> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   4.96891942986343149169e-1,
+                                                                   1.19407335596821748136e-1,
+                                                                   1.84390069996797460739e-2,
+                                                                   2.05005411380752280634e-3,
+                                                                   1.74199726850728954779e-4,
+                                                                   1.17165504812276087879e-5,
+                                                                   6.37089938753578885000e-7,
+                                                                   2.83417486729348133836e-8,
+                                                                   1.03645320137695820377e-9,
+                                                                   3.11027653093248632585e-11,
+                                                                   7.59115669050501251043e-13,
+                                                                   1.47987204602114848417e-14,
+                                                                   2.23193957348859290720e-16,
+                                                                   2.46111632630327142818e-18,
+                                                                   1.77668337104540310328e-20,
+                                                                   6.34086145209017265760e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 9 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<9> = std::array<double, 16>{{5.26315789473684210526e-2,
+                                                                   -1.52129783779652028031e-2,
+                                                                   1.81472237197643007645e-3,
+                                                                   -6.48669196216815520384e-5,
+                                                                   -1.17656954669521278487e-5,
+                                                                   2.31542624318843042516e-6,
+                                                                   -2.29096633857294138082e-7,
+                                                                   1.57735998919754110374e-8,
+                                                                   -8.22558492959097395475e-10,
+                                                                   3.35420009772070443070e-11,
+                                                                   -1.07923178890207503451e-12,
+                                                                   2.72088038728267923170e-14,
+                                                                   -5.24658255529643231621e-16,
+                                                                   7.35714068238013480239e-18,
+                                                                   -6.75435187509740915595e-20,
+                                                                   3.08237327209294617100e-22}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<9> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                   6.15715315580565913933e-1,
+                                                                   1.78512008522432708002e-1,
+                                                                   3.26278644815983995264e-2,
+                                                                   4.23329867725661442707e-3,
+                                                                   4.15303867314192204103e-4,
+                                                                   3.19859071656239239180e-5,
+                                                                   1.97911815834846325810e-6,
+                                                                   9.97122778236381342214e-8,
+                                                                   4.11544411176662608943e-9,
+                                                                   1.39055046934142464133e-10,
+                                                                   3.81618279230128988959e-12,
+                                                                   8.36193282687156940214e-14,
+                                                                   1.41829814478168287324e-15,
+                                                                   1.76154210813573822280e-17,
+                                                                   1.43612612038760358235e-19,
+                                                                   5.81084675033046561787e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 10 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<10> = std::array<double, 16>{{4.76190476190476190476e-2,
+                                                                    -2.03785636651361012905e-2,
+                                                                    4.31667432703245184528e-3,
+                                                                    -5.96932929292016815383e-4,
+                                                                    6.01026102806595730532e-5,
+                                                                    -4.66158920154485698864e-6,
+                                                                    2.87649064084623677920e-7,
+                                                                    -1.43857025310911682380e-8,
+                                                                    5.88447988016482009446e-10,
+                                                                    -1.97152902413637152350e-11,
+                                                                    5.37595982661259945469e-13,
+                                                                    -1.17433988910887456682e-14,
+                                                                    1.99484582761078005697e-16,
+                                                                    -2.49621440756246598412e-18,
+                                                                    2.06613174541995017003e-20,
+                                                                    -8.57274205723677406822e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<10> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.85093641293011468285e-1,
+                                                                    1.13561746396083240729e-1,
+                                                                    1.70415206982910648337e-2,
+                                                                    1.83596592615919984581e-3,
+                                                                    1.50666990918887103114e-4,
+                                                                    9.74793009218488334423e-6,
+                                                                    5.07430839714588927781e-7,
+                                                                    2.14847921542116952087e-8,
+                                                                    7.42398095358112474349e-10,
+                                                                    2.08585304449538842710e-11,
+                                                                    4.70991304521725605193e-13,
+                                                                    8.36001947406668506206e-15,
+                                                                    1.12265795971529552052e-16,
+                                                                    1.06651516947962285039e-18,
+                                                                    6.29275973508473390192e-21,
+                                                                    1.66836665961075241849e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 11 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<11> = std::array<double, 16>{{4.34782608695652173913e-2,
+                                                                    -1.90495205620233136468e-2,
+                                                                    4.11116201101503157128e-3,
+                                                                    -5.77573968588915949082e-4,
+                                                                    5.89687609147396322963e-5,
+                                                                    -4.63157449748110367144e-6,
+                                                                    2.89129495589149230291e-7,
+                                                                    -1.46171484142783901727e-8,
+                                                                    6.04055346970331113935e-10,
+                                                                    -2.04357798517176707362e-11,
+                                                                    5.62443930350929114379e-13,
+                                                                    -1.23962674720436272377e-14,
+                                                                    2.12389228597494330041e-16,
+                                                                    -2.67968893361778782996e-18,
+                                                                    2.23547803118655969159e-20,
+                                                                    -9.34291409459472798380e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<11> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.81861027073463787929e-1,
+                                                                    1.11942945235006516280e-1,
+                                                                    1.66501122607552211330e-2,
+                                                                    1.77527737983357151476e-3,
+                                                                    1.43909853646464422914e-4,
+                                                                    9.17485919244832036671e-6,
+                                                                    4.69128555184812760869e-7,
+                                                                    1.94270431118519940595e-8,
+                                                                    6.52646118381282917148e-10,
+                                                                    1.76741710979275371781e-11,
+                                                                    3.79645430094746289481e-13,
+                                                                    6.27462384507665231667e-15,
+                                                                    7.54940095088702753686e-17,
+                                                                    5.92375423640899666175e-19,
+                                                                    2.28250534050883823602e-21,
+                                                                    -1.48734203524106087214e-25}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 12 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<12> = std::array<double, 16>{{4.00000000000000000000e-2,
+                                                                    -1.64123067637795862217e-2,
+                                                                    3.29417223615583419638e-3,
+                                                                    -4.27234242100590628881e-4,
+                                                                    3.99310490274926041488e-5,
+                                                                    -2.84290030895688145224e-6,
+                                                                    1.58953702162300578034e-7,
+                                                                    -7.09050325597191156981e-9,
+                                                                    2.53560082450822465051e-10,
+                                                                    -7.22985236436488079757e-12,
+                                                                    1.61463310779547018096e-13,
+                                                                    -2.72113150195627547994e-15,
+                                                                    3.20496367016483726647e-17,
+                                                                    -2.16860559605410947246e-19,
+                                                                    2.03092651689375045113e-22,
+                                                                    6.11967220691347397316e-24}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<12> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.15618256831436250209e-1,
+                                                                    1.28744135026234662877e-1,
+                                                                    2.06860298954818500050e-2,
+                                                                    2.39671853950733631383e-3,
+                                                                    2.12590491038463006140e-4,
+                                                                    1.49536172575329511083e-5,
+                                                                    8.52092712638306763848e-7,
+                                                                    3.98143171593650074098e-8,
+                                                                    1.53316726379455786937e-9,
+                                                                    4.85848227320331028834e-11,
+                                                                    1.25621737845617948318e-12,
+                                                                    2.60387410441853028869e-14,
+                                                                    4.19306253417231045162e-16,
+                                                                    4.96055676425427392033e-18,
+                                                                    3.86370801005479504262e-20,
+                                                                    1.49770700467974720850e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 13 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<13> = std::array<double, 16>{{3.70370370370370370370e-2,
+                                                                    -1.61342435319728090548e-2,
+                                                                    3.44023571428098921127e-3,
+                                                                    -4.75339861187622811194e-4,
+                                                                    4.75532539927261808542e-5,
+                                                                    -3.64776167275122242844e-6,
+                                                                    2.21709954393315603186e-7,
+                                                                    -1.08793493207067674561e-8,
+                                                                    4.34955652363840834103e-10,
+                                                                    -1.41848836632248825751e-11,
+                                                                    3.74795044162244668513e-13,
+                                                                    -7.89163070542770842949e-15,
+                                                                    1.28399934848498067778e-16,
+                                                                    -1.52668747927683401263e-18,
+                                                                    1.18810242984317129446e-20,
+                                                                    -4.56705584183438588901e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<13> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.95409907395354898174e-1,
+                                                                    1.18646200203175192223e-1,
+                                                                    1.82501395607098104712e-2,
+                                                                    2.01997988403508372396e-3,
+                                                                    1.70758440700789060731e-4,
+                                                                    1.14163907788987526533e-5,
+                                                                    6.16442042436495005657e-7,
+                                                                    2.71991967014019544062e-8,
+                                                                    9.85085749798073680306e-10,
+                                                                    2.92227761085800409440e-11,
+                                                                    7.03443402225473723850e-13,
+                                                                    1.34856793534110988252e-14,
+                                                                    1.99257477331396111006e-16,
+                                                                    2.14180653651934064539e-18,
+                                                                    1.49708974373838198990e-20,
+                                                                    5.12518004917834960786e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 14 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<14> = std::array<double, 16>{{3.44827586206896551724e-2,
+                                                                    -1.22798922919173866819e-2,
+                                                                    2.00010409909087607389e-3,
+                                                                    -1.85930477398160449304e-4,
+                                                                    9.00907830970386304045e-6,
+                                                                    9.09248076532031586231e-8,
+                                                                    -5.62031905062989273482e-8,
+                                                                    5.41975561423100028912e-9,
+                                                                    -3.31157423112658731573e-10,
+                                                                    1.48403319450837327590e-11,
+                                                                    -5.08553199218113300079e-13,
+                                                                    1.34086211858853965058e-14,
+                                                                    -2.67193296688545040576e-16,
+                                                                    3.83884534410655906460e-18,
+                                                                    -3.58654141417190684070e-20,
+                                                                    1.65590496093568501177e-22}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<14> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.79366994502137688805e-1,
+                                                                    1.60597558207502183469e-1,
+                                                                    2.83693336014917557586e-2,
+                                                                    3.58488892007583501501e-3,
+                                                                    3.44499604386768506614e-4,
+                                                                    2.61050679604575993590e-5,
+                                                                    1.59479065519361039287e-6,
+                                                                    7.95589144312407096358e-8,
+                                                                    3.25915799447780005732e-9,
+                                                                    1.09525779075674536009e-10,
+                                                                    2.99490770699354358251e-12,
+                                                                    6.54922696256371357381e-14,
+                                                                    1.11026716636980737367e-15,
+                                                                    1.38018737189605241576e-17,
+                                                                    1.12773442989082948524e-19,
+                                                                    4.57926232665531398443e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 15 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<15> = std::array<double, 16>{{3.22580645161290322581e-2,
+                                                                    -1.21654011320329602519e-2,
+                                                                    2.15604259204243801917e-3,
+                                                                    -2.32818307851116105926e-4,
+                                                                    1.63315899611258944554e-5,
+                                                                    -6.83953388768141610121e-7,
+                                                                    4.78338475856481660066e-9,
+                                                                    1.68594396751665839858e-9,
+                                                                    -1.49187285683762157886e-10,
+                                                                    7.71149646005706341028e-12,
+                                                                    -2.84237718499561077496e-13,
+                                                                    7.80585474484397707335e-15,
+                                                                    -1.59014262224529984921e-16,
+                                                                    2.30489443229869172799e-18,
+                                                                    -2.14799651658274217975e-20,
+                                                                    9.77418101249995880402e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<15> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.62266504300917624448e-1,
+                                                                    1.52169923960671166219e-1,
+                                                                    2.63660388039683619976e-2,
+                                                                    3.27987251541861412132e-3,
+                                                                    3.11193154139091491834e-4,
+                                                                    2.33386911027674880462e-5,
+                                                                    1.41399595511933061053e-6,
+                                                                    7.00779056304608634529e-8,
+                                                                    2.85629161401396899321e-9,
+                                                                    9.56312358993810390925e-11,
+                                                                    2.60841039944528009822e-12,
+                                                                    5.69598730862533147984e-14,
+                                                                    9.65240761528314212683e-16,
+                                                                    1.20058242574938571595e-17,
+                                                                    9.82435879931033865813e-20,
+                                                                    3.99872179033957821543e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 16 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<16> = std::array<double, 16>{{3.03030303030303030303e-2,
+                                                                    -1.28222378810915957348e-2,
+                                                                    2.63042290731298113865e-3,
+                                                                    -3.46573509131886908601e-4,
+                                                                    3.27642768369979463759e-5,
+                                                                    -2.35204147289113051745e-6,
+                                                                    1.32318024973824609425e-7,
+                                                                    -5.93234395513032245925e-9,
+                                                                    2.13302359861121384980e-10,
+                                                                    -6.13224276749169664207e-12,
+                                                                    1.39117079742930287062e-13,
+                                                                    -2.42481208636183076692e-15,
+                                                                    3.09384631566260711513e-17,
+                                                                    -2.64070660131101409202e-19,
+                                                                    1.24378835710548420700e-21,
+                                                                    -1.77927200116385689279e-24}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<16> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.19723292781120171924e-1,
+                                                                    1.30882828903295722611e-1,
+                                                                    2.12240299036919773112e-2,
+                                                                    2.48350754172963405705e-3,
+                                                                    2.22644471836287493943e-4,
+                                                                    1.58408009676708922688e-5,
+                                                                    9.13790780323810480910e-7,
+                                                                    4.32632907855997335510e-8,
+                                                                    1.68969653828146109863e-9,
+                                                                    5.43634257324243332112e-11,
+                                                                    1.42869085120015337200e-12,
+                                                                    3.01353252686164284938e-14,
+                                                                    4.94450391301268569686e-16,
+                                                                    5.96831076308249679592e-18,
+                                                                    4.74999919254986789342e-20,
+                                                                    1.88439089606336339984e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 17 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<17> = std::array<double, 16>{{2.85714285714285714286e-2,
+                                                                    -6.99732177141293085199e-3,
+                                                                    1.95876472769729824408e-4,
+                                                                    1.69992498550439749896e-4,
+                                                                    -3.85491618628741507940e-5,
+                                                                    4.75773646343502089437e-6,
+                                                                    -4.08404666078320864402e-7,
+                                                                    2.64265507345147162679e-8,
+                                                                    -1.33627370479172899164e-9,
+                                                                    5.36324520389336789951e-11,
+                                                                    -1.71215274818298398866e-12,
+                                                                    4.30260641357672241338e-14,
+                                                                    -8.29286136899535661724e-16,
+                                                                    1.16437478975844477659e-17,
+                                                                    -1.07148170901560901828e-19,
+                                                                    4.90417596392467978558e-22}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<17> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    7.01039683946493408229e-1,
+                                                                    2.21283374805404609020e-1,
+                                                                    4.29791825655532547246e-2,
+                                                                    5.83963058019031349549e-3,
+                                                                    5.94282800494303885958e-4,
+                                                                    4.71736871758265873477e-5,
+                                                                    2.99461861239998447390e-6,
+                                                                    1.54278554113725182678e-7,
+                                                                    6.49524621180327291970e-9,
+                                                                    2.23456617073408455441e-10,
+                                                                    6.23548612320110865728e-12,
+                                                                    1.38785692738400868828e-13,
+                                                                    2.38939408088742199071e-15,
+                                                                    3.01079993576012048007e-17,
+                                                                    2.48955767044267979622e-19,
+                                                                    1.02154432066458557235e-21}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 18 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<18> = std::array<double, 16>{{2.70270270270270270270e-2,
+                                                                    -1.17737491134935045450e-2,
+                                                                    2.48494027876620254824e-3,
+                                                                    -3.36914174879649505438e-4,
+                                                                    3.28088449711893057189e-5,
+                                                                    -2.43032960602486156017e-6,
+                                                                    1.41446176429840829891e-7,
+                                                                    -6.58412193833226632980e-9,
+                                                                    2.46976724777829316489e-10,
+                                                                    -7.45582365270721080247e-12,
+                                                                    1.79213447936719305807e-13,
+                                                                    -3.35239565569722504444e-15,
+                                                                    4.68089479244195497012e-17,
+                                                                    -4.51820742711923306534e-19,
+                                                                    2.57499304509901108898e-21,
+                                                                    -5.63419269545262076905e-24}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<18> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.13089231518689015132e-1,
+                                                                    1.27500241354906812541e-1,
+                                                                    2.03909229234689841348e-2,
+                                                                    2.35187007421722204040e-3,
+                                                                    2.07701878357186161227e-4,
+                                                                    1.45482422649781306716e-5,
+                                                                    8.25638811946272017215e-7,
+                                                                    3.84288237982720921141e-8,
+                                                                    1.47435541141182720514e-9,
+                                                                    4.65579127475652623765e-11,
+                                                                    1.19985565864325405529e-12,
+                                                                    2.47943652639651595284e-14,
+                                                                    3.98141874506490051967e-16,
+                                                                    4.69811265064966120866e-18,
+                                                                    3.65095428327931359271e-20,
+                                                                    1.41244659201024459149e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 19 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<19> = std::array<double, 16>{{2.56410256410256410256e-2,
+                                                                    -1.18372723398436560660e-2,
+                                                                    2.65502446823916897836e-3,
+                                                                    -3.83961498710111502185e-4,
+                                                                    4.00671715291613794859e-5,
+                                                                    -3.19877393250217329488e-6,
+                                                                    2.02071288699045302295e-7,
+                                                                    -1.02997197030322799146e-8,
+                                                                    4.27768111414764762101e-10,
+                                                                    -1.45031272307788936165e-11,
+                                                                    3.98978476560197244481e-13,
+                                                                    -8.76713562183423246452e-15,
+                                                                    1.49372200671380482951e-16,
+                                                                    -1.86884063634428129886e-18,
+                                                                    1.54098545428671870322e-20,
+                                                                    -6.34033561536514372462e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<19> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.89565890941219439281e-1,
+                                                                    1.15742210136781362162e-1,
+                                                                    1.75537557462404243680e-2,
+                                                                    1.91295326123837251993e-3,
+                                                                    1.58954198458683158618e-4,
+                                                                    1.04254032092176834992e-5,
+                                                                    5.50928699253818097383e-7,
+                                                                    2.37209091014595439091e-8,
+                                                                    8.35302020582073351731e-10,
+                                                                    2.39816993862003004789e-11,
+                                                                    5.55348758858480175171e-13,
+                                                                    1.01598429686637714840e-14,
+                                                                    1.41657007028070732636e-16,
+                                                                    1.41357433099341204747e-18,
+                                                                    8.94327973308061855986e-21,
+                                                                    2.65471041822819307215e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 20 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<20> = std::array<double, 16>{{2.43902439024390243902e-2,
+                                                                    -1.08664330608515633664e-2,
+                                                                    2.34577930297264532905e-3,
+                                                                    -3.25570988677861274888e-4,
+                                                                    3.25045313644992142047e-5,
+                                                                    -2.47439559610827631506e-6,
+                                                                    1.48491082684896900525e-7,
+                                                                    -7.16019859286666541790e-9,
+                                                                    2.80014936796013019465e-10,
+                                                                    -8.89214854641253929374e-12,
+                                                                    2.27741270542574222051e-13,
+                                                                    -4.62685037836910005591e-15,
+                                                                    7.23048391687998726393e-17,
+                                                                    -8.22174703400246583733e-19,
+                                                                    6.09824609751433187441e-21,
+                                                                    -2.23247677903327340036e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<20> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.07964616598109097723e-1,
+                                                                    1.24959751227310622568e-1,
+                                                                    1.97832270441547081186e-2,
+                                                                    2.25871989740782184303e-3,
+                                                                    1.97456701589030511959e-4,
+                                                                    1.36906705022665705777e-5,
+                                                                    7.69121610831197995190e-7,
+                                                                    3.54380117130408148786e-8,
+                                                                    1.34600951512080848575e-9,
+                                                                    4.20833562112205534987e-11,
+                                                                    1.07390573947910895937e-12,
+                                                                    2.19772444411867139531e-14,
+                                                                    3.49557565063804202938e-16,
+                                                                    4.08656490873050236163e-18,
+                                                                    3.14706836674054678320e-20,
+                                                                    1.20688361980499775177e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 21 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<21> = std::array<double, 16>{{2.32558139534883720930e-2,
+                                                                    -9.42537802283098698208e-3,
+                                                                    1.80940348249275734585e-3,
+                                                                    -2.16164228888119963785e-4,
+                                                                    1.76637150668538839456e-5,
+                                                                    -1.00828420749988002835e-6,
+                                                                    3.76087604968527771795e-8,
+                                                                    -5.52082265735193246494e-10,
+                                                                    -3.52189277138597281668e-11,
+                                                                    3.21542909657152139378e-12,
+                                                                    -1.45454596635653067545e-13,
+                                                                    4.47995687396500433473e-15,
+                                                                    -9.87511111760120201885e-17,
+                                                                    1.52328830108786498246e-18,
+                                                                    -1.49980338129157362488e-20,
+                                                                    7.20376270986716790026e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<21> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.50264300573823139651e-1,
+                                                                    1.46165650673759112133e-1,
+                                                                    2.49161929570405477063e-2,
+                                                                    3.05545005955250390667e-3,
+                                                                    2.86258221295230630508e-4,
+                                                                    2.12294409519338813329e-5,
+                                                                    1.27346486769485129786e-6,
+                                                                    6.25568094834772784474e-8,
+                                                                    2.52974976613697625812e-9,
+                                                                    8.41091382005790338758e-11,
+                                                                    2.28004691079235145881e-12,
+                                                                    4.95215761242511906041e-14,
+                                                                    8.35287332925120097706e-16,
+                                                                    1.03484349891336761962e-17,
+                                                                    8.44060347694921814678e-20,
+                                                                    3.42675926955453455275e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 22 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<22> = std::array<double, 16>{{2.22222222222222222222e-2,
+                                                                    -1.00678294430635063839e-2,
+                                                                    2.20931179425042610587e-3,
+                                                                    -3.11690621118321047577e-4,
+                                                                    3.16406425889640901899e-5,
+                                                                    -2.45036845376307683237e-6,
+                                                                    1.49722021628932781864e-7,
+                                                                    -7.35918875200115474649e-9,
+                                                                    2.93801463210013797497e-10,
+                                                                    -9.54276104449400737884e-12,
+                                                                    2.50580254648136647791e-13,
+                                                                    -5.23529646932301331309e-15,
+                                                                    8.44559670687309087244e-17,
+                                                                    -9.96173377232577898005e-19,
+                                                                    7.71190683932839220066e-21,
+                                                                    -2.96996464161284844955e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<22> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.04394483572780494285e-1,
+                                                                    1.23166245799011669915e-1,
+                                                                    1.93481626909437903761e-2,
+                                                                    2.19103720044067085126e-3,
+                                                                    1.89895133060391247803e-4,
+                                                                    1.30471499012533505730e-5,
+                                                                    7.25959245637163049112e-7,
+                                                                    3.31109165713300798268e-8,
+                                                                    1.24414734349918226459e-9,
+                                                                    3.84564767093850561732e-11,
+                                                                    9.69500253014482433490e-13,
+                                                                    1.95855247646547711214e-14,
+                                                                    3.07245212894910412576e-16,
+                                                                    3.53928785646536372768e-18,
+                                                                    2.68286466666216470883e-20,
+                                                                    1.01155324963867314995e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 23 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<23> = std::array<double, 16>{{2.12765957446808510638e-2,
+                                                                    -1.01304486921859268622e-2,
+                                                                    2.33875536698098691890e-3,
+                                                                    -3.47589801702610854805e-4,
+                                                                    3.72310525667096417729e-5,
+                                                                    -3.04812148203402010814e-6,
+                                                                    1.97324605875265903591e-7,
+                                                                    -1.03018378604442444271e-8,
+                                                                    4.38105129898176101884e-10,
+                                                                    -1.52077058696027980385e-11,
+                                                                    4.28376781164125231053e-13,
+                                                                    -9.64180157848965747848e-15,
+                                                                    1.68376551128189218117e-16,
+                                                                    -2.16159528696014535901e-18,
+                                                                    1.83213851952486495341e-20,
+                                                                    -7.77092434617333791827e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<23> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.83052584936649154201e-1,
+                                                                    1.12473341421034767063e-1,
+                                                                    1.67615604065889274576e-2,
+                                                                    1.78982694966386924815e-3,
+                                                                    1.45210770078049288684e-4,
+                                                                    9.25677200840692154663e-6,
+                                                                    4.72607069819211412439e-7,
+                                                                    1.95011150324029813460e-8,
+                                                                    6.50697807426755163576e-10,
+                                                                    1.74114979168869211589e-11,
+                                                                    3.66258684940472050850e-13,
+                                                                    5.82812575112222827645e-15,
+                                                                    6.49999150729305596200e-17,
+                                                                    4.21393421531300263280e-19,
+                                                                    5.17833348117665574402e-22,
+                                                                    -8.96729557023684881786e-24}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 24 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<24> = std::array<double, 16>{{2.04081632653061224490e-2,
+                                                                    -9.10299072121105445898e-3,
+                                                                    1.96063871921640844181e-3,
+                                                                    -2.70578925291515008829e-4,
+                                                                    2.67669667592935171677e-5,
+                                                                    -2.01124993504839511108e-6,
+                                                                    1.18616660395949144597e-7,
+                                                                    -5.59210679473075263676e-9,
+                                                                    2.12456699895527906566e-10,
+                                                                    -6.50106707101681496880e-12,
+                                                                    1.58691937168980242787e-13,
+                                                                    -3.02591355905024109911e-15,
+                                                                    4.33766273808507867183e-17,
+                                                                    -4.36113121977130733075e-19,
+                                                                    2.67751959192048492199e-21,
+                                                                    -7.03521437613817602968e-24}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<24> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.14737768386148597521e-1,
+                                                                    1.28359119845683877781e-1,
+                                                                    2.06070925553860709312e-2,
+                                                                    2.38677919655686356440e-3,
+                                                                    2.11752410903974340331e-4,
+                                                                    1.49064474159770150917e-5,
+                                                                    8.50618421469124293409e-7,
+                                                                    3.98298931831623803083e-8,
+                                                                    1.53819501914810371408e-9,
+                                                                    4.89255873090792262873e-11,
+                                                                    1.27089801553576277450e-12,
+                                                                    2.64918951840002967834e-14,
+                                                                    4.29489930996972288815e-16,
+                                                                    5.12168375459390539019e-18,
+                                                                    4.02658407044250482366e-20,
+                                                                    1.57784414119336104835e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 25 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<25> = std::array<double, 16>{{1.96078431372549019608e-2,
+                                                                    -8.46036358641131906733e-3,
+                                                                    1.74980429949385743460e-3,
+                                                                    -2.29669184699385288580e-4,
+                                                                    2.13293313487475377777e-5,
+                                                                    -1.47716546049853953869e-6,
+                                                                    7.81207064233606004932e-8,
+                                                                    -3.15951387184265157669e-9,
+                                                                    9.50323615046030695106e-11,
+                                                                    -1.92296641427397544258e-12,
+                                                                    1.50431782646035117469e-14,
+                                                                    5.52501561701950757761e-16,
+                                                                    -2.54457237223418761480e-17,
+                                                                    5.33431807951603434915e-19,
+                                                                    -6.31838692578933669750e-21,
+                                                                    3.46776735143850875810e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<25> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.30785608036418943279e-1,
+                                                                    1.36359618087962125577e-1,
+                                                                    2.25321415397323372709e-2,
+                                                                    2.68368111166921016406e-3,
+                                                                    2.44618391738689929665e-4,
+                                                                    1.76761017679557447572e-5,
+                                                                    1.03444139017114131639e-6,
+                                                                    4.96296175690420299581e-8,
+                                                                    1.96199276771322600432e-9,
+                                                                    6.38201721997147470190e-11,
+                                                                    1.69369265884538635027e-12,
+                                                                    3.60317214797229376705e-14,
+                                                                    5.95517182591992793469e-16,
+                                                                    7.23126300957635283828e-18,
+                                                                    5.78165272521792004867e-20,
+                                                                    2.30092378596311248173e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 26 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<26> = std::array<double, 16>{{1.88679245283018867925e-2,
+                                                                    -8.03827397533913266814e-3,
+                                                                    1.63461835637951661757e-3,
+                                                                    -2.09708125807209720941e-4,
+                                                                    1.88680139114466029725e-5,
+                                                                    -1.24785750249643218935e-6,
+                                                                    6.14011720744550135891e-8,
+                                                                    -2.18528862245671159537e-9,
+                                                                    4.91627328439048749325e-11,
+                                                                    -1.72703846860939707199e-13,
+                                                                    -3.88052181041181318394e-14,
+                                                                    1.86858830106401023311e-15,
+                                                                    -5.02681237178023157245e-17,
+                                                                    8.75824297916867866366e-19,
+                                                                    -9.42026022209984542553e-21,
+                                                                    4.86607156372992519688e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<26> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    5.37607842943389591106e-1,
+                                                                    1.39780959022717254925e-1,
+                                                                    2.33605101288046380914e-2,
+                                                                    2.81228133944678385797e-3,
+                                                                    2.58952777207640161446e-4,
+                                                                    1.88929395995413041949e-5,
+                                                                    1.11583089987969235265e-6,
+                                                                    5.40043266025012286628e-8,
+                                                                    2.15284038551591227995e-9,
+                                                                    7.05903454532412840145e-11,
+                                                                    1.88779158457013483724e-12,
+                                                                    4.04583090502150926603e-14,
+                                                                    6.73445580265101967589e-16,
+                                                                    8.23380208425640966260e-18,
+                                                                    6.62702731820545885191e-20,
+                                                                    2.65437099615151862833e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 27 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<27> = std::array<double, 16>{{1.81818181818181818182e-2,
+                                                                    -8.51636995505005919838e-3,
+                                                                    1.93067374899669489882e-3,
+                                                                    -2.81271503270550814364e-4,
+                                                                    2.94809461976601154955e-5,
+                                                                    -2.35761951058424810260e-6,
+                                                                    1.48805526895671739982e-7,
+                                                                    -7.55923913051943437052e-9,
+                                                                    3.12107549569486938378e-10,
+                                                                    -1.04919859116465867668e-11,
+                                                                    2.85369811423364370856e-13,
+                                                                    -6.17995169886862777684e-15,
+                                                                    1.03377917030651077961e-16,
+                                                                    -1.26397785929169108362e-18,
+                                                                    1.01234549920148946969e-20,
+                                                                    -4.01098820114062181251e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<27> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.96511933174001107716e-1,
+                                                                    1.19175823114126430702e-1,
+                                                                    1.83724530513447795177e-2,
+                                                                    2.03799206888921353303e-3,
+                                                                    1.72650263772058037504e-4,
+                                                                    1.15664867321844548392e-5,
+                                                                    6.25730182608775076773e-7,
+                                                                    2.76551448222923570147e-8,
+                                                                    1.00294640497927576219e-9,
+                                                                    2.97787417094983277335e-11,
+                                                                    7.16976993074434587878e-13,
+                                                                    1.37348344661033718204e-14,
+                                                                    2.02504555802404148413e-16,
+                                                                    2.16758412061992086607e-18,
+                                                                    1.50405307920800363856e-20,
+                                                                    5.08639540448874753511e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 28 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<28> = std::array<double, 16>{{1.75438596491228070175e-2,
+                                                                    -6.10076297873576520181e-3,
+                                                                    8.81298841155668533087e-4,
+                                                                    -5.18362132151585107073e-5,
+                                                                    -2.98684797297277910763e-6,
+                                                                    9.47035678960368106939e-7,
+                                                                    -1.06909406562414853741e-7,
+                                                                    7.96408819180183548333e-9,
+                                                                    -4.39900234096881325821e-10,
+                                                                    1.87725747618969366366e-11,
+                                                                    -6.26937888559984037335e-13,
+                                                                    1.63026452297188081924e-14,
+                                                                    -3.22540533142179727728e-16,
+                                                                    4.61885465909188447949e-18,
+                                                                    -4.31087500948194532944e-20,
+                                                                    1.99069692585065542857e-22}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<28> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    6.18358205127315652128e-1,
+                                                                    1.80417829230028831100e-1,
+                                                                    3.32358942011616378953e-2,
+                                                                    4.35145714446765873723e-3,
+                                                                    4.31243386590558059300e-4,
+                                                                    3.35849965322454515324e-5,
+                                                                    2.10331407513292802116e-6,
+                                                                    1.07359910292249217767e-7,
+                                                                    4.49361984537399241615e-9,
+                                                                    1.54132834549562135380e-10,
+                                                                    4.29866488526565528861e-12,
+                                                                    9.58308470214599694422e-14,
+                                                                    1.65575485805274876983e-15,
+                                                                    2.09764058640225101314e-17,
+                                                                    1.74691254146717604878e-19,
+                                                                    7.23184047055364352626e-22}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 29 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<29> = std::array<double, 16>{{1.69491525423728813559e-2,
+                                                                    -8.09365492068717801155e-3,
+                                                                    1.87147359624167692466e-3,
+                                                                    -2.78270351051208505739e-4,
+                                                                    2.97928911501267230130e-5,
+                                                                    -2.43629431612832294976e-6,
+                                                                    1.57441693620317841674e-7,
+                                                                    -8.20178563335779104992e-9,
+                                                                    3.47938732738638586681e-10,
+                                                                    -1.20463898163687037532e-11,
+                                                                    3.38448840625547405308e-13,
+                                                                    -7.59942104159231943247e-15,
+                                                                    1.32443948844026320678e-16,
+                                                                    -1.69802173276346732783e-18,
+                                                                    1.43878269657669843449e-20,
+                                                                    -6.11026382338496089784e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<29> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.89687474433554925657e-1,
+                                                                    1.15795121327237349185e-1,
+                                                                    1.75645574345002428163e-2,
+                                                                    1.91430914830713664286e-3,
+                                                                    1.59068501172573468919e-4,
+                                                                    1.04318882923450324194e-5,
+                                                                    5.51140952984960307908e-7,
+                                                                    2.37200679793054053335e-8,
+                                                                    8.34715717894809054613e-10,
+                                                                    2.39408609257751509948e-11,
+                                                                    5.53587901139715808636e-13,
+                                                                    1.01058824417908613767e-14,
+                                                                    1.40458205404862740052e-16,
+                                                                    1.39488051285580412460e-18,
+                                                                    8.75754102234474909924e-21,
+                                                                    2.56512786126806138657e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 30 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<30> = std::array<double, 16>{{1.63934426229508196721e-2,
+                                                                    -7.88555419101544252669e-3,
+                                                                    1.83652980715896503930e-3,
+                                                                    -2.75031570647374476891e-4,
+                                                                    2.96562471056559872153e-5,
+                                                                    -2.44241317151112861798e-6,
+                                                                    1.58965926225965274018e-7,
+                                                                    -8.34081047671106819195e-9,
+                                                                    3.56411284534850387566e-10,
+                                                                    -1.24308925768385123370e-11,
+                                                                    3.51885148011215272784e-13,
+                                                                    -7.96232276972242969770e-15,
+                                                                    1.39882429042732598746e-16,
+                                                                    -1.80847421648472164908e-18,
+                                                                    1.54611056774648631600e-20,
+                                                                    -6.63051043051895293375e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<30> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.87235162602026206091e-1,
+                                                                    1.14564928668206930662e-1,
+                                                                    1.72665843845449147598e-2,
+                                                                    1.86802535152179901949e-3,
+                                                                    1.53905913529823508293e-4,
+                                                                    9.99325544791136293485e-6,
+                                                                    5.21770559420918156168e-7,
+                                                                    2.21392839443880304625e-8,
+                                                                    7.65640762840855477514e-10,
+                                                                    2.14856123510064723263e-11,
+                                                                    4.83027833806620062803e-13,
+                                                                    8.49206127592574321151e-15,
+                                                                    1.11949291542582794654e-16,
+                                                                    1.02660111520919483608e-18,
+                                                                    5.63677322112970486058e-21,
+                                                                    1.25268857288736322730e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 31 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<31> = std::array<double, 16>{{1.58730158730158730159e-2,
+                                                                    -7.63317980439468923154e-3,
+                                                                    1.77661391449710696737e-3,
+                                                                    -2.65784685442741494630e-4,
+                                                                    2.86176906908627466121e-5,
+                                                                    -2.35239408038977135601e-6,
+                                                                    1.52737496455163714728e-7,
+                                                                    -7.99000922558205800366e-9,
+                                                                    3.40167497069641857003e-10,
+                                                                    -1.18112312743020274603e-11,
+                                                                    3.32521090159801483633e-13,
+                                                                    -7.47401801746878938179e-15,
+                                                                    1.30226528606158271110e-16,
+                                                                    -1.66642851973091635330e-18,
+                                                                    1.40621899512840668838e-20,
+                                                                    -5.92914729158278452678e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<31> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.88340441553903881200e-1,
+                                                                    1.15092004695758268196e-1,
+                                                                    1.73872959407640782781e-2,
+                                                                    1.88564151760119797993e-3,
+                                                                    1.55738008348721093275e-4,
+                                                                    1.01370501787948686425e-5,
+                                                                    5.30562783618428010573e-7,
+                                                                    2.25651094117346479016e-8,
+                                                                    7.82065250381266057311e-10,
+                                                                    2.19875876029805771598e-11,
+                                                                    4.94971873515717723440e-13,
+                                                                    8.70529502999949333472e-15,
+                                                                    1.14597440695255109884e-16,
+                                                                    1.04553936643367216738e-18,
+                                                                    5.66052304751768759660e-21,
+                                                                    1.20193823032288338735e-23}};
+/**@}*/
+
+/**@{ [15/16] Padé approximant coefficients for Boys function of order 32 */
+/** Numerator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Ps<32> = std::array<double, 16>{{1.53846153846153846154e-2,
+                                                                    -7.37235791601723641081e-3,
+                                                                    1.70945429709262156255e-3,
+                                                                    -2.54711662207113222114e-4,
+                                                                    2.73085222541909635569e-5,
+                                                                    -2.23463365884501708909e-6,
+                                                                    1.44397022000553793729e-7,
+                                                                    -7.51542504117148854555e-9,
+                                                                    3.18244954584754119400e-10,
+                                                                    -1.09871130237313413731e-11,
+                                                                    3.07446465443023745817e-13,
+                                                                    -6.86576165670315410751e-15,
+                                                                    1.18799428998351563650e-16,
+                                                                    -1.50883548066750907215e-18,
+                                                                    1.26286511343317105440e-20,
+                                                                    -5.27684085916232957902e-23}};
+/** Denominator of Padé approximant */
+template <>
+__constant__ inline constexpr auto Qs<32> = std::array<double, 17>{{1.00000000000000000000e+0,
+                                                                    4.90945989190222864540e-1,
+                                                                    1.16390921592688045827e-1,
+                                                                    1.76997912373417706777e-2,
+                                                                    1.93382498010684854804e-3,
+                                                                    1.61069506273469855362e-4,
+                                                                    1.05860705292370221495e-5,
+                                                                    5.60339775796405183772e-7,
+                                                                    2.41507944521227543883e-8,
+                                                                    8.50541301773203858290e-10,
+                                                                    2.43897789316385187084e-11,
+                                                                    5.63000058840783352706e-13,
+                                                                    1.02357114582028294705e-14,
+                                                                    1.41132653479189453083e-16,
+                                                                    1.38111800194266607056e-18,
+                                                                    8.43590234894293837383e-21,
+                                                                    2.33689768291357548227e-23}};
+/**@}*/
+
+/**@{ Thresholds beyond which the finite sum upward recursion yields relative errors <= 1.0e-13
+ * These are computed using the method in J. Chem. Phys. 2021, 155, 034112
+ */
+template <int32_t order>
+__constant__ constexpr double TS_13{};
 /** Threshold for Boys function of order 1 */
-template <> inline constexpr double TS_15<1>{0.9790139040220137789788757};
+template <>
+__constant__ inline constexpr double TS_13<1>{0.0083359539129440802909810};
 /** Threshold for Boys function of order 2 */
-template <> inline constexpr double TS_15<2>{2.1017070305855924703549480};
+template <>
+__constant__ inline constexpr double TS_13<2>{0.1483677058333275256943842};
 /** Threshold for Boys function of order 3 */
-template <> inline constexpr double TS_15<3>{3.1445397188199003877102450};
+template <>
+__constant__ inline constexpr double TS_13<3>{0.4468891297665036527315762};
 /** Threshold for Boys function of order 4 */
-template <> inline constexpr double TS_15<4>{4.1596325783127538486945790};
+template <>
+__constant__ inline constexpr double TS_13<4>{0.8422551749252363128972224};
 /** Threshold for Boys function of order 5 */
-template <> inline constexpr double TS_15<5>{5.1647541030693416502563210};
+template <>
+__constant__ inline constexpr double TS_13<5>{1.2987498970390662893975220};
 /** Threshold for Boys function of order 6 */
-template <> inline constexpr double TS_15<6>{6.1662708147482573174081310};
+template <>
+__constant__ inline constexpr double TS_13<6>{1.7982063155907441940850110};
 /** Threshold for Boys function of order 7 */
-template <> inline constexpr double TS_15<7>{7.1665138135123299470676790};
+template <>
+__constant__ inline constexpr double TS_13<7>{2.3306728683535954184097800};
 /** Threshold for Boys function of order 8 */
-template <> inline constexpr double TS_15<8>{8.1663337431398378811955660};
+template <>
+__constant__ inline constexpr double TS_13<8>{2.8901038705608355002121170};
 /** Threshold for Boys function of order 9 */
-template <> inline constexpr double TS_15<9>{9.1660347430929746224688570};
+template <>
+__constant__ inline constexpr double TS_13<9>{3.4724184675192165228430210};
 /** Threshold for Boys function of order 10 */
-template <> inline constexpr double TS_15<10>{10.1657208555644035148649800};
+template <>
+__constant__ inline constexpr double TS_13<10>{4.0746011964882191724360590};
 /** Threshold for Boys function of order 11 */
-template <> inline constexpr double TS_15<11>{11.1654242318177621008175600};
+template <>
+__constant__ inline constexpr double TS_13<11>{4.6942731133656686228949190};
 /** Threshold for Boys function of order 12 */
-template <> inline constexpr double TS_15<12>{12.1651521021988257881092300};
+template <>
+__constant__ inline constexpr double TS_13<12>{5.3294795254653956293754380};
 /** Threshold for Boys function of order 13 */
-template <> inline constexpr double TS_15<13>{13.1649036844718511223338900};
+template <>
+__constant__ inline constexpr double TS_13<13>{5.9785775458091405455211740};
 /** Threshold for Boys function of order 14 */
-template <> inline constexpr double TS_15<14>{14.1646760858562882757562900};
+template <>
+__constant__ inline constexpr double TS_13<14>{6.6401695502402973508932960};
 /** Threshold for Boys function of order 15 */
-template <> inline constexpr double TS_15<15>{15.1644662407825723109250900};
+template <>
+__constant__ inline constexpr double TS_13<15>{7.3130582336632937600288150};
 /** Threshold for Boys function of order 16 */
-template <> inline constexpr double TS_15<16>{16.1642714595624443809025000};
+template <>
+__constant__ inline constexpr double TS_13<16>{7.9962127322635060446370520};
 /** Threshold for Boys function of order 17 */
-template <> inline constexpr double TS_15<17>{17.1640895153669329492643500};
+template <>
+__constant__ inline constexpr double TS_13<17>{8.6887413898241819368477650};
 /** Threshold for Boys function of order 18 */
-template <> inline constexpr double TS_15<18>{18.1639185951486175659590700};
+template <>
+__constant__ inline constexpr double TS_13<18>{9.3898692705262431756785280};
 /** Threshold for Boys function of order 19 */
-template <> inline constexpr double TS_15<19>{19.1637572235597897195541300};
+template <>
+__constant__ inline constexpr double TS_13<19>{10.0989194732002313395711600};
 /** Threshold for Boys function of order 20 */
-template <> inline constexpr double TS_15<20>{20.1636041927913716725512300};
+template <>
+__constant__ inline constexpr double TS_13<20>{10.8152976306961921000006500};
 /** Threshold for Boys function of order 21 */
-template <> inline constexpr double TS_15<21>{21.1634585056448626119282300};
+template <>
+__constant__ inline constexpr double TS_13<21>{11.5384790930459151404748400};
 /** Threshold for Boys function of order 22 */
-template <> inline constexpr double TS_15<22>{22.1633193312972751485743300};
+template <>
+__constant__ inline constexpr double TS_13<22>{12.2679983518110252462708700};
 /** Threshold for Boys function of order 23 */
-template <> inline constexpr double TS_15<23>{23.1631859713558954194004500};
+template <>
+__constant__ inline constexpr double TS_13<23>{13.0034403148974800081488300};
 /** Threshold for Boys function of order 24 */
-template <> inline constexpr double TS_15<24>{24.1630578337965419349846800};
+template <>
+__constant__ inline constexpr double TS_13<24>{13.7444330953929901225250500};
 /** Threshold for Boys function of order 25 */
-template <> inline constexpr double TS_15<25>{25.1629344128275676292202600};
+template <>
+__constant__ inline constexpr double TS_13<25>{14.4906420321716611898394100};
 /** Threshold for Boys function of order 26 */
-template <> inline constexpr double TS_15<26>{26.1628152731982740150813500};
+template <>
+__constant__ inline constexpr double TS_13<26>{15.2417647102876093867525600};
 /** Threshold for Boys function of order 27 */
-template <> inline constexpr double TS_15<27>{27.1627000378561825211132500};
+template <>
+__constant__ inline constexpr double TS_13<27>{15.9975267931685717536422700};
 /** Threshold for Boys function of order 28 */
-template <> inline constexpr double TS_15<28>{28.1625883781476762000404200};
+template <>
+__constant__ inline constexpr double TS_13<28>{16.7576785155530562167119100};
+/** Threshold for Boys function of order 29 */
+template <>
+__constant__ inline constexpr double TS_13<29>{17.5219917162738957295744500};
+/** Threshold for Boys function of order 30 */
+template <>
+__constant__ inline constexpr double TS_13<30>{18.2902573141921819631823600};
+/** Threshold for Boys function of order 31 */
+template <>
+__constant__ inline constexpr double TS_13<31>{19.0622831498026245364209500};
+/** Threshold for Boys function of order 32 */
+template <>
+__constant__ inline constexpr double TS_13<32>{19.8378921302211846712677700};
+/**@}*/
+
+/**@{ Thresholds beyond which the finite sum upward recursion yields relative errors <= 1.0e-14
+ * These are computed using the method in J. Chem. Phys. 2021, 155, 034112
+ */
+template <int32_t order>
+__constant__ constexpr double TS_14{};
+/** Threshold for Boys function of order 1 */
+template <>
+__constant__ inline constexpr double TS_14<1>{0.0842289602844362981561397};
+/** Threshold for Boys function of order 2 */
+template <>
+__constant__ inline constexpr double TS_14<2>{0.5003451750053743607295222};
+/** Threshold for Boys function of order 3 */
+template <>
+__constant__ inline constexpr double TS_14<3>{1.0583694968977321096560450};
+/** Threshold for Boys function of order 4 */
+template <>
+__constant__ inline constexpr double TS_14<4>{1.6750158810668407917253280};
+/** Threshold for Boys function of order 5 */
+template <>
+__constant__ inline constexpr double TS_14<5>{2.3265075887772442495988270};
+/** Threshold for Boys function of order 6 */
+template <>
+__constant__ inline constexpr double TS_14<6>{3.0037376825087475888478400};
+/** Threshold for Boys function of order 7 */
+template <>
+__constant__ inline constexpr double TS_14<7>{3.7019853047433407630701530};
+/** Threshold for Boys function of order 8 */
+template <>
+__constant__ inline constexpr double TS_14<8>{4.4181037270685214832573930};
+/** Threshold for Boys function of order 9 */
+template <>
+__constant__ inline constexpr double TS_14<9>{5.1496628738776405176627610};
+/** Threshold for Boys function of order 10 */
+template <>
+__constant__ inline constexpr double TS_14<10>{5.8946681974842429889185320};
+/** Threshold for Boys function of order 11 */
+template <>
+__constant__ inline constexpr double TS_14<11>{6.6514528311865436355181700};
+/** Threshold for Boys function of order 12 */
+template <>
+__constant__ inline constexpr double TS_14<12>{7.4186193647985479735843880};
+/** Threshold for Boys function of order 13 */
+template <>
+__constant__ inline constexpr double TS_14<13>{8.1949957283110543224954200};
+/** Threshold for Boys function of order 14 */
+template <>
+__constant__ inline constexpr double TS_14<14>{8.9795969896727078690907210};
+/** Threshold for Boys function of order 15 */
+template <>
+__constant__ inline constexpr double TS_14<15>{9.7715921148436764561194670};
+/** Threshold for Boys function of order 16 */
+template <>
+__constant__ inline constexpr double TS_14<16>{10.5702758553146870652322300};
+/** Threshold for Boys function of order 17 */
+template <>
+__constant__ inline constexpr double TS_14<17>{11.3750456107774717507044800};
+/** Threshold for Boys function of order 18 */
+template <>
+__constant__ inline constexpr double TS_14<18>{12.1853827365098142636077300};
+/** Threshold for Boys function of order 19 */
+template <>
+__constant__ inline constexpr double TS_14<19>{13.0008375922732696942855200};
+/** Threshold for Boys function of order 20 */
+template <>
+__constant__ inline constexpr double TS_14<20>{13.8210176239508920073901800};
+/** Threshold for Boys function of order 21 */
+template <>
+__constant__ inline constexpr double TS_14<21>{14.6455778499282601817043400};
+/** Threshold for Boys function of order 22 */
+template <>
+__constant__ inline constexpr double TS_14<22>{15.4742132333089567029346000};
+/** Threshold for Boys function of order 23 */
+template <>
+__constant__ inline constexpr double TS_14<23>{16.3066525276783553323323000};
+/** Threshold for Boys function of order 24 */
+template <>
+__constant__ inline constexpr double TS_14<24>{17.1426532757364654146174500};
+/** Threshold for Boys function of order 25 */
+template <>
+__constant__ inline constexpr double TS_14<25>{17.9819977138635616649749200};
+/** Threshold for Boys function of order 26 */
+template <>
+__constant__ inline constexpr double TS_14<26>{18.8244893930083095108100100};
+/** Threshold for Boys function of order 27 */
+template <>
+__constant__ inline constexpr double TS_14<27>{19.6699503700489401311293700};
+/** Threshold for Boys function of order 28 */
+template <>
+__constant__ inline constexpr double TS_14<28>{20.5182188569208513606976000};
+/** Threshold for Boys function of order 29 */
+template <>
+__constant__ inline constexpr double TS_14<29>{21.3691472398663454998477600};
+/** Threshold for Boys function of order 30 */
+template <>
+__constant__ inline constexpr double TS_14<30>{22.2226004001631004907611800};
+/** Threshold for Boys function of order 31 */
+template <>
+__constant__ inline constexpr double TS_14<31>{23.0784542821643793737340900};
+/** Threshold for Boys function of order 32 */
+template <>
+__constant__ inline constexpr double TS_14<32>{23.9365946655846032573126600};
+/**@}*/
+
+/**@{ Thresholds beyond which the finite sum upward recursion yields relative errors <= 1.0e-15
+ * These are computed using the method in J. Chem. Phys. 2021, 155, 034112
+ */
+template <int32_t order>
+__constant__ constexpr double TS_15{};
+/** Threshold for Boys function of order 1 */
+template <>
+__constant__ inline constexpr double TS_15<1>{0.9790139040220137789788757};
+/** Threshold for Boys function of order 2 */
+template <>
+__constant__ inline constexpr double TS_15<2>{2.1017070305855924703549480};
+/** Threshold for Boys function of order 3 */
+template <>
+__constant__ inline constexpr double TS_15<3>{3.1445397188199003877102450};
+/** Threshold for Boys function of order 4 */
+template <>
+__constant__ inline constexpr double TS_15<4>{4.1596325783127538486945790};
+/** Threshold for Boys function of order 5 */
+template <>
+__constant__ inline constexpr double TS_15<5>{5.1647541030693416502563210};
+/** Threshold for Boys function of order 6 */
+template <>
+__constant__ inline constexpr double TS_15<6>{6.1662708147482573174081310};
+/** Threshold for Boys function of order 7 */
+template <>
+__constant__ inline constexpr double TS_15<7>{7.1665138135123299470676790};
+/** Threshold for Boys function of order 8 */
+template <>
+__constant__ inline constexpr double TS_15<8>{8.1663337431398378811955660};
+/** Threshold for Boys function of order 9 */
+template <>
+__constant__ inline constexpr double TS_15<9>{9.1660347430929746224688570};
+/** Threshold for Boys function of order 10 */
+template <>
+__constant__ inline constexpr double TS_15<10>{10.1657208555644035148649800};
+/** Threshold for Boys function of order 11 */
+template <>
+__constant__ inline constexpr double TS_15<11>{11.1654242318177621008175600};
+/** Threshold for Boys function of order 12 */
+template <>
+__constant__ inline constexpr double TS_15<12>{12.1651521021988257881092300};
+/** Threshold for Boys function of order 13 */
+template <>
+__constant__ inline constexpr double TS_15<13>{13.1649036844718511223338900};
+/** Threshold for Boys function of order 14 */
+template <>
+__constant__ inline constexpr double TS_15<14>{14.1646760858562882757562900};
+/** Threshold for Boys function of order 15 */
+template <>
+__constant__ inline constexpr double TS_15<15>{15.1644662407825723109250900};
+/** Threshold for Boys function of order 16 */
+template <>
+__constant__ inline constexpr double TS_15<16>{16.1642714595624443809025000};
+/** Threshold for Boys function of order 17 */
+template <>
+__constant__ inline constexpr double TS_15<17>{17.1640895153669329492643500};
+/** Threshold for Boys function of order 18 */
+template <>
+__constant__ inline constexpr double TS_15<18>{18.1639185951486175659590700};
+/** Threshold for Boys function of order 19 */
+template <>
+__constant__ inline constexpr double TS_15<19>{19.1637572235597897195541300};
+/** Threshold for Boys function of order 20 */
+template <>
+__constant__ inline constexpr double TS_15<20>{20.1636041927913716725512300};
+/** Threshold for Boys function of order 21 */
+template <>
+__constant__ inline constexpr double TS_15<21>{21.1634585056448626119282300};
+/** Threshold for Boys function of order 22 */
+template <>
+__constant__ inline constexpr double TS_15<22>{22.1633193312972751485743300};
+/** Threshold for Boys function of order 23 */
+template <>
+__constant__ inline constexpr double TS_15<23>{23.1631859713558954194004500};
+/** Threshold for Boys function of order 24 */
+template <>
+__constant__ inline constexpr double TS_15<24>{24.1630578337965419349846800};
+/** Threshold for Boys function of order 25 */
+template <>
+__constant__ inline constexpr double TS_15<25>{25.1629344128275676292202600};
+/** Threshold for Boys function of order 26 */
+template <>
+__constant__ inline constexpr double TS_15<26>{26.1628152731982740150813500};
+/** Threshold for Boys function of order 27 */
+template <>
+__constant__ inline constexpr double TS_15<27>{27.1627000378561825211132500};
+/** Threshold for Boys function of order 28 */
+template <>
+__constant__ inline constexpr double TS_15<28>{28.1625883781476762000404200};
+/** Threshold for Boys function of order 29 */
+template <>
+__constant__ inline constexpr double TS_15<29>{29.1624800059674819832544000};
+/** Threshold for Boys function of order 30 */
+template <>
+__constant__ inline constexpr double TS_15<30>{30.1623746674168145700659300};
+/** Threshold for Boys function of order 31 */
+template <>
+__constant__ inline constexpr double TS_15<31>{31.1622721376391869623872700};
+/** Threshold for Boys function of order 32 */
+template <>
+__constant__ inline constexpr double TS_15<32>{32.1621722165837129037994600};
 /**@}*/

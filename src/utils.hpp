@@ -78,7 +78,7 @@ constexpr std::array<T, N> fill_array_impl(Callable op,
  */
 template <typename T,
           typename = std::enable_if_t<std::is_floating_point<T>::value>>
-inline constexpr int32_t grid_point(T x) {
+__host__ __device__ inline constexpr int32_t grid_point(T x) {
   return (x > 1.0e5) ? 1000000 : static_cast<int32_t>(10.0 * x + 0.5);
 }
 
@@ -89,7 +89,7 @@ inline constexpr int32_t grid_point(T x) {
  *
  *  @note Should be reliable up to n = 150
  */
-constexpr double factorial(unsigned int n) {
+__host__ __device__ constexpr double factorial(unsigned int n) {
   return (n > 1) ? n * factorial(n - 1) : static_cast<double>(1);
 }
 
@@ -110,7 +110,7 @@ constexpr double factorial(unsigned int n) {
  */
 template <typename T,
           typename U = typename std::common_type<T, unsigned int>::type>
-U modified_falling_factorial(T x, unsigned int N) {
+__host__ __device__ U modified_falling_factorial(T x, unsigned int N) {
   auto ret = static_cast<U>(1.0);
   if (N != 0) {
     for (auto k = 1; k <= N; ++k) {
@@ -152,7 +152,7 @@ constexpr T modified_falling_factorial(T x) {
  */
 template <typename T, std::size_t N, typename Callable,
           typename Is = std::make_index_sequence<N>>
-constexpr std::array<T, N> fill_array(Callable op) {
+__host__ __device__ constexpr std::array<T, N> fill_array(Callable op) {
   return detail::fill_array_impl<T, N>(op, Is{});
 }
 
@@ -162,13 +162,14 @@ constexpr std::array<T, N> fill_array(Callable op) {
  * @tparam N size of the array
  */
 template <typename T, std::size_t N>
-constexpr std::array<T, N> inverse_odd_numbers() {
+__host__ __device__ constexpr std::array<T, N> inverse_odd_numbers() {
   return fill_array<T, N>(detail::inverse_odd_number);
 }
 
 /** Base case of Horner's scheme compile-time recursion (variadic
  * implementation). */
-template <typename X, typename T> constexpr X horner(X /* x */, T v) {
+template <typename X, typename T>
+__host__ __device__ constexpr X horner(X /* x */, T v) {
   return static_cast<X>(v);
 }
 
@@ -191,10 +192,13 @@ template <typename X, typename T> constexpr X horner(X /* x */, T v) {
  * @return value of polynomial at point
  */
 template <typename X, typename T, typename... Args>
-constexpr X horner(X x, T c0, Args... cs) {
+__host__ __device__ constexpr X horner(X x, T c0, Args... cs) {
   // return static_cast<X>(c0) + x * horner(x, cs...);
-  //  TODO for the GPU the function call is without std::
+#ifdef Fnx_HAS_HIP
+  return fma(x, horner(x, cs...), static_cast<X>(c0));
+#else
   return std::fma(x, horner(x, cs...), static_cast<X>(c0));
+#endif
 }
 
 namespace detail {
@@ -203,8 +207,8 @@ namespace detail {
  * @note This uses the variadic implementation internally.
  */
 template <typename T, std::size_t N, std::size_t... Is>
-constexpr T horner_impl(T x, const std::array<T, N> &coefs,
-                        std::index_sequence<Is...>) {
+__host__ __device__ constexpr T horner_impl(T x, const std::array<T, N> &coefs,
+                                            std::index_sequence<Is...>) {
   return horner(x, coefs[Is]...);
 }
 } // namespace detail
@@ -228,6 +232,6 @@ constexpr T horner_impl(T x, const std::array<T, N> &coefs,
  * @return value of polynomial at point
  */
 template <typename T, std::size_t N, typename Is = std::make_index_sequence<N>>
-constexpr T horner(T x, const std::array<T, N> &c) {
+__host__ __device__ constexpr T horner(T x, const std::array<T, N> &c) {
   return detail::horner_impl(x, c, Is{});
 }

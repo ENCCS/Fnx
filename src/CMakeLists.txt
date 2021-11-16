@@ -19,10 +19,6 @@ if(Fnx_HAS_HIP)
     PRIVATE
       Fnx.hip.cpp
   )
-  target_link_libraries(Fnx
-    PUBLIC
-      hip::device
-    )
 endif()
 
 include(FetchContent)
