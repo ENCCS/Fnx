@@ -1,0 +1,16 @@
+name: Fnx
+channels:
+  - conda-forge
+dependencies:
+  - libblas * *mkl
+  - scipy
+  - numpy
+  - sympy
+  - ipywidgets
+  - ipympl
+  - matplotlib
+  - jupyterlab
+  - altair
+  - pandas
+  - python=3.9
+  - tabulate
