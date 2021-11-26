@@ -12,5 +12,8 @@ dependencies:
   - jupyterlab
   - altair
   - pandas
+  - pip
   - python=3.9
   - tabulate
+  - pip:
+     - baryrat
